@@ -1,0 +1,27 @@
+services:
+  web:
+    image: nginxinc/nginx-unprivileged:1.25-alpine
+    container_name: bte-website
+    restart: unless-stopped
+    ports:
+      # Changed host port to 8086. Container port remains 8080.
+      - "8086:8080"
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 64M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
