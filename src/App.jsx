@@ -86,7 +86,7 @@ function App() {
         {/* Header */}
         <header className="relative z-10 flex justify-between items-center p-6 md:p-12 max-w-screen-2xl mx-auto w-full">
           <div className="flex items-center gap-4 nav-elem">
-            <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
             <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE CORPORATION</span>
           </div>
           <nav className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">

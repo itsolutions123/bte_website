@@ -1,11 +1,15 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import tsgLogoRaw from '../assets/tsg_hd.jpeg';
 import prLogoRaw from '../assets/pr_hd.jpeg';
 import sapporoLogoRaw from '../assets/sapporo_hd.png';
 import pansolLogoRaw from '../assets/pansol_hd.png';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function removeBg(url, removeType) {
   return new Promise((resolve) => {
@@ -36,15 +40,15 @@ function removeBg(url, removeType) {
 }
 
 const rawBrands = [
-  { name: "THE SANDWICH GUY", logo: tsgLogoRaw, removeType: 'white' },
+  { name: "THE SANDWICH GUY", logo: tsgLogoRaw, removeType: 'none' },
   { name: "PARES RETIRO", logo: prLogoRaw, removeType: 'black' },
   { name: "SAPPORO MILKTEA", logo: sapporoLogoRaw, removeType: 'none' },
-  { name: "CALIFORNIA BEACH PANSOL", logo: pansolLogoRaw, removeType: 'none', isWhiteLogo: true }
+  { name: "CALIFORNIA BEACH PANSOL", logo: pansolLogoRaw, removeType: 'none' }
 ];
 
 export default function BrandsSection() {
   const [processedLogos, setProcessedLogos] = useState({});
-  const titleRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     rawBrands.forEach((b) => {
@@ -54,13 +58,33 @@ export default function BrandsSection() {
         });
       }
     });
-
-    // GSAP Title Animation
-    gsap.fromTo(titleRef.current, 
-      { opacity: 0, y: 50 }, 
-      { opacity: 1, y: 0, duration: 1, ease: "power3.out" }
-    );
   }, []);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 75%",
+        end: "top 20%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    tl.fromTo(".brands-title",
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+      )
+      .fromTo(".brands-text-col",
+        { opacity: 0, x: -40 },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+        "-=0.4"
+      )
+      .fromTo(".brands-logo-col",
+        { opacity: 0, x: 40 },
+        { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+        "-=0.6"
+      );
+  }, { scope: containerRef });
 
   const brands = rawBrands.map((b) => ({
     ...b,
@@ -105,86 +129,74 @@ export default function BrandsSection() {
     if (!emblaTextApi) return;
     const interval = setInterval(() => {
       emblaTextApi.scrollNext();
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [emblaTextApi]);
 
   return (
-    <section id="brands" className="py-10 bg-white flex flex-col items-center min-h-screen justify-center w-full overflow-hidden">
-      <div className="w-full max-w-screen-2xl mx-auto px-6 lg:px-10 flex flex-col h-full justify-center">
-        
-        {/* Top Full-Width Title - GSAP straight line */}
-        <div ref={titleRef} className="w-full text-center mb-10 overflow-hidden">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-[5.5rem] font-black uppercase text-gray-900 leading-tight tracking-tighter whitespace-nowrap">
-            HOME OF <span className="text-[#c19532]">BIGTIME BRANDS!</span>
+    <section id="brands" ref={containerRef} className="py-20 bg-[#050505] flex flex-col items-center min-h-[90svh] justify-center w-full overflow-hidden border-t border-white/5">
+      <div className="w-full max-w-screen-2xl mx-auto px-6 md:px-12 flex flex-col h-full justify-center">
+
+        <div className="brands-title w-full text-center mb-16 overflow-hidden">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase text-white leading-tight tracking-tighter">
+            HOME OF <span className="text-[#cda434]">BIGTIME BRANDS!</span>
           </h2>
         </div>
 
-        {/* Bottom Section: Text Scroller (1/3) & Logo Carousel (2/3) */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-16 w-full flex-grow">
-          
-          {/* Left Side: Vertical Scrolling Text (Rule of Thirds: 1/3 width) */}
-          <div className="w-full md:w-1/3 h-[400px] overflow-hidden relative" ref={emblaTextRef}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
+
+          {/* Left Side: 5 Columns */}
+          <div className="brands-text-col lg:col-span-5 h-[350px] overflow-hidden relative" ref={emblaTextRef}>
             <div className="flex flex-col h-full">
               {brands.map((brand, index) => (
                 <div
                   key={brand.name + index}
-                  className="flex-[0_0_33.33%] min-h-0 flex items-center justify-start cursor-pointer px-4"
+                  className="flex-[0_0_33.33%] min-h-0 flex items-center justify-center lg:justify-start cursor-pointer px-4"
                   onClick={() => emblaTextApi?.scrollTo(index)}
                 >
-                  <h3 className={`text-2xl lg:text-4xl xl:text-5xl font-bold transition-all duration-500 w-full ${
-                    index === selectedIndex ? 'text-[#0f172a] scale-100 opacity-100' : 'text-gray-300 scale-90 opacity-40'
+                  <h3 className={`text-2xl lg:text-3xl xl:text-4xl font-bold transition-all duration-500 w-full text-center lg:text-left ${
+                    index === selectedIndex ? 'text-white scale-100 opacity-100' : 'text-gray-600 scale-95 opacity-40'
                   }`}>
                     {brand.name}
                   </h3>
                 </div>
               ))}
             </div>
-            <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-white to-transparent pointer-events-none z-10"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-white to-transparent pointer-events-none z-10"></div>
+            <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10"></div>
           </div>
 
-          {/* Right Side: Logo Display (Rule of Thirds: 2/3 width) */}
-          <div className="w-full md:w-2/3 flex flex-col items-center justify-center relative h-[500px]">
-            <div className="w-full h-[450px] overflow-hidden" ref={emblaLogoRef}>
+          {/* Right Side: 7 Columns */}
+          <div className="brands-logo-col lg:col-span-7 flex flex-col items-center lg:items-end justify-center relative h-[450px] lg:pr-8">
+            <div className="w-full h-full overflow-hidden" ref={emblaLogoRef}>
               <div className="flex h-full">
                 {brands.map((brand, index) => (
-                  <div key={brand.name + index} className="flex-[0_0_100%] min-w-0 flex items-center justify-center p-4 h-full">
-                    {brand.isWhiteLogo ? (
-                      <div className="bg-slate-900/90 border border-slate-800 p-10 rounded-3xl shadow-xl w-full max-w-[600px] h-full max-h-[400px] flex items-center justify-center">
-                        <img
-                          src={brand.logo}
-                          alt={brand.name}
-                          className="max-h-[320px] max-w-full object-contain"
-                        />
-                      </div>
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center p-2">
-                        <img
-                          src={brand.logo}
-                          alt={brand.name}
-                          className="max-h-[420px] max-w-[600px] object-contain drop-shadow-md"
-                        />
-                      </div>
-                    )}
+                  <div key={brand.name + index} className="flex-[0_0_100%] min-w-0 flex items-center justify-center lg:justify-end p-4 h-full">
+                    <div className="w-full h-full flex items-center justify-center lg:justify-end p-2">
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className="max-h-[350px] max-w-[500px] object-contain"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Carousel Indicators (Dots) */}
-            <div className="flex justify-center gap-4 mt-6 z-20">
+            <div className="flex justify-center lg:justify-end w-full max-w-[500px] gap-4 mt-8 z-20">
               {brands.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => emblaLogoApi?.scrollTo(index)}
-                  className={`w-4 h-4 rounded-full transition-all duration-300 ${
-                    index === selectedIndex ? 'bg-[#c19532] scale-125' : 'bg-gray-300'
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === selectedIndex ? 'bg-[#cda434] scale-125' : 'bg-gray-700 hover:bg-gray-500'
                   }`}
                 />
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </section>
