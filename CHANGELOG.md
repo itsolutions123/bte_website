@@ -13,3 +13,5 @@
 - Added GSAP timeline animations for hero staggered load.
 - Implemented dynamic canvas background removal for the main BTE logo to eliminate the white halo.
 - Redesigned Brands section to seamlessly match the new dark theme.
+- 2026-10-09: Implemented React Router for clean URL paths (/home, /jobs, /community).
+- 2026-10-09: Added custom Nginx configuration to support SPA routing and fix 404s on page refresh.

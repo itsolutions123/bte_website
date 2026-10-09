@@ -1,4 +1,2 @@
-- 2026-10-09: Fixed Brands nav link scroll behavior and reduced excess vertical whitespace in BrandsSection.
-- 2026-10-09: Fixed Y-axis alignment of 'Contact Us' button in App.jsx. Removed duplicated markup and adjusted top margin to align closer to description.
-- 2026-10-09: Removed gold drop-shadow glow from logos in BrandsSection.jsx.
-- 2026-10-09: Removed CSS filters from header logo in App.jsx to restore original gold color.
+# BUGLOG
+- 2026-10-09: Fixed 404 error on direct navigation/reload of router paths (e.g., /home) by adding `default.conf` to Nginx with `try_files $uri $uri/ /index.html;` fallback, and mounting it via compose.yaml.
