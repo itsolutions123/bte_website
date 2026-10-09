@@ -7,3 +7,4 @@
 - **Assets:** Canvas utility actively strips white background from JPEG logos on load to ensure clean blending.
 - **Dependencies:** React, Vite, Tailwind CSS, GSAP, Embla Carousel, React Router DOM.
 - **Deployment:** Static Vite build served from /opt/stacks/bte-website/html/ via Nginx with custom try_files routing fallback.
+- Added /connect route and Contact form feature

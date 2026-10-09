@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -110,14 +110,72 @@ function Home() {
             Pioneering the future of industry. Join a community of driven professionals and access unparalleled opportunities to elevate your career.
           </p>
         </div>
-        <button className="hero-btn px-10 py-5 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#cda434] hover:text-white transition-colors duration-300 mt-6 lg:mt-8">
+        <Link to="/connect" className="hero-btn inline-block px-10 py-5 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#cda434] hover:text-white transition-colors duration-300 mt-6 lg:mt-8">
           Contact us
-        </button>
+        </Link>
       </div>
       <div className="hero-logo w-full relative z-10 lg:col-span-5 flex items-center justify-center lg:justify-end">
         {logoSrc && (
           <img src={logoSrc} alt="BTE HD Logo" className="w-full max-w-[320px] md:max-w-[480px] lg:max-w-[560px] xl:max-w-[640px] h-auto object-contain hover:scale-105 transition-all duration-700 ease-out" />
         )}
+      </div>
+    </div>
+  );
+}
+
+function Connect() {
+  const navigate = useNavigate();
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const body = `Name: ${fd.get('firstName')} ${fd.get('lastName')}%0D%0AContact: ${fd.get('contactNumber')}%0D%0AEmail: ${fd.get('email')}%0D%0A%0D%0AInquiry:%0D%0A${fd.get('inquiry')}`;
+    window.location.href = `mailto:hello@example.com?subject=Website Inquiry&body=${body}`;
+  };
+
+  return (
+    <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-6 py-12 max-w-3xl mx-auto w-full">
+      <div className="w-full mb-8">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="w-12 h-12 flex items-center justify-center border border-gray-600 hover:border-[#cda434] text-gray-400 hover:text-white transition-colors duration-300"
+          aria-label="Go back"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </button>
+      </div>
+      <div className="w-full border border-[#cda434]/30 bg-black/50 backdrop-blur-sm p-8 md:p-12">
+        <form onSubmit={handleSend} className="flex flex-col gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-gray-400 uppercase tracking-widest font-bold">First Name</label>
+              <input name="firstName" required type="text" className="bg-transparent border-b border-gray-600 p-2 text-white focus:border-[#cda434] outline-none transition-colors" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-gray-400 uppercase tracking-widest font-bold">Last Name</label>
+              <input name="lastName" required type="text" className="bg-transparent border-b border-gray-600 p-2 text-white focus:border-[#cda434] outline-none transition-colors" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-gray-400 uppercase tracking-widest font-bold">Contact Number</label>
+              <input name="contactNumber" type="tel" className="bg-transparent border-b border-gray-600 p-2 text-white focus:border-[#cda434] outline-none transition-colors" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-xs text-gray-400 uppercase tracking-widest font-bold">Email</label>
+              <input name="email" required type="email" className="bg-transparent border-b border-gray-600 p-2 text-white focus:border-[#cda434] outline-none transition-colors" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-xs text-gray-400 uppercase tracking-widest font-bold">Inquiry</label>
+            <textarea name="inquiry" required rows="5" className="bg-transparent border border-gray-600 p-3 text-white focus:border-[#cda434] outline-none transition-colors resize-none"></textarea>
+          </div>
+          <div className="mt-4">
+            <button type="submit" className="px-10 py-4 border border-white text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-black transition-colors duration-300">
+              Send
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -154,6 +212,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/connect" element={<Connect />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/community" element={<Community />} />
           <Route path="/brands" element={<div className="relative z-20"><BrandsSection /></div>} />
