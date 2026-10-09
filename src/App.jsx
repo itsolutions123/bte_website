@@ -181,10 +181,83 @@ function Connect() {
   );
 }
 
+const initialJobListings = [
+  {
+    id: 1,
+    title: "ADMIN ASSISTANT",
+    salary: "UP TO 25,000",
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut et id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore",
+    requirements: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore"
+  },
+  {
+    id: 2,
+    title: "AREA MANAGER",
+    salary: "UP TO 30,000",
+    description: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut et id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore",
+    requirements: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore"
+  }
+];
+
 function Jobs() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedJob, setSelectedJob] = useState(initialJobListings[0]);
+
+  const filteredJobs = initialJobListings.filter(job => 
+    job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    job.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="relative z-10 flex-grow flex items-center justify-center">
-      <h1 className="text-4xl font-black uppercase tracking-widest text-white">Jobs <span className="text-[#cda434]">Coming Soon</span></h1>
+    <div className="relative z-10 flex-grow flex flex-col px-6 md:px-12 py-8 max-w-screen-2xl mx-auto w-full gap-8">
+      <div className="flex justify-end w-full">
+        <input 
+          type="text" 
+          placeholder="SEARCH BY KEYWORD" 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="bg-transparent border border-gray-600 p-3 text-white focus:border-[#cda434] outline-none transition-colors w-full md:w-1/3 text-xs uppercase tracking-widest font-bold"
+        />
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col gap-4 border-r border-gray-800 pr-0 lg:pr-8">
+          <h2 className="text-xl font-bold uppercase tracking-widest text-[#cda434] mb-4">Job Summary</h2>
+          <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh] pr-2">
+            {filteredJobs.map(job => (
+              <div 
+                key={job.id} 
+                onClick={() => setSelectedJob(job)}
+                className={`p-6 border cursor-pointer transition-all duration-300 ${selectedJob?.id === job.id ? 'border-[#cda434] bg-[#cda434]/10' : 'border-gray-600 hover:border-gray-400'}`}
+              >
+                <h3 className="text-lg font-bold uppercase tracking-wider text-white">{job.title}</h3>
+                <p className="text-sm text-gray-400 mt-2 uppercase tracking-wide">Monthly: {job.salary}</p>
+              </div>
+            ))}
+            {filteredJobs.length === 0 && (
+              <p className="text-gray-500 text-sm italic">No jobs found matching your keyword.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="lg:col-span-2 flex flex-col border border-gray-600 p-8 md:p-12 bg-black/30 backdrop-blur-sm min-h-[60vh]">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-8 border-b border-gray-800 pb-4">Job Full Detail</h2>
+          {selectedJob ? (
+            <div className="flex flex-col gap-6">
+              <h3 className="text-4xl font-black uppercase tracking-widest text-[#cda434]">{selectedJob.title}</h3>
+              <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.description}</p>
+              
+              <div className="mt-4">
+                <h4 className="text-lg font-bold text-[#cda434] mb-2 uppercase tracking-wider">Requirements:</h4>
+                <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.requirements}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center flex-grow text-gray-500 uppercase tracking-widest text-xs">
+              Select a job to view details
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
