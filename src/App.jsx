@@ -18,7 +18,7 @@ function App() {
             <a href="#" className="hover:text-black transition-colors">Home</a>
             <a href="#" className="hover:text-black transition-colors">Jobs</a>
             <a href="#" className="hover:text-black transition-colors">Community</a>
-            <a href="#" className="hover:text-black transition-colors">Brands</a>
+            <a href="#brands" onClick={(e) => { e.preventDefault(); document.getElementById('brands').scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-black transition-colors cursor-pointer">Brands</a>
           </nav>
         </header>
 

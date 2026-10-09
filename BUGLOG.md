@@ -1,0 +1,1 @@
+- 2026-10-09: Fixed Brands nav link scroll behavior and reduced excess vertical whitespace in BrandsSection.
