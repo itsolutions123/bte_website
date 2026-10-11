@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -61,19 +61,41 @@ function removeWhiteBgAndCrop(url) {
 }
 
 function Navigation() {
+  const location = useLocation();
+  const isHome = location.pathname === '/' || location.pathname === '/home';
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!isHome) return null;
+
+  const isCollapsed = isScrolled && !isHovered;
+
   return (
-    <header className="relative z-10 flex justify-between items-center p-6 md:p-12 max-w-screen-2xl mx-auto w-full">
+    <header 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 md:p-12 max-w-screen-2xl mx-auto w-full transition-transform duration-500 ease-in-out ${isCollapsed ? '-translate-y-full' : 'translate-y-0'}`}
+    >
       <div className="flex items-center gap-4 nav-elem">
         <Link to="/">
           <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
         </Link>
-        <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE CORPORATION</span>
+        <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE</span>
       </div>
       <nav className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
         <Link to="/home" className="hover:text-white transition-colors duration-300 nav-elem">Home</Link>
-        <Link to="/jobs" className="hover:text-white transition-colors duration-300 nav-elem">Jobs</Link>
-        <Link to="/community" className="hover:text-white transition-colors duration-300 nav-elem">Community</Link>
+        <Link to="/jobs" className="hover:text-white transition-colors duration-300 nav-elem">Careers</Link>
+        <Link to="/about" className="hover:text-white transition-colors duration-300 nav-elem">About Us</Link>
         <Link to="/brands" className="hover:text-white transition-colors duration-300 nav-elem">Brands</Link>
+        <Link to="/community" className="hover:text-white transition-colors duration-300 nav-elem">Community</Link>
       </nav>
     </header>
   );
@@ -89,28 +111,26 @@ function Home() {
 
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.from('.hero-title', { y: 50, opacity: 0, duration: 0.8 })
-      .from('.hero-desc', { x: -30, opacity: 0, duration: 0.8 }, '-=0.6')
-      .from('.hero-btn', { scale: 0.9, opacity: 0, duration: 0.5, ease: 'back.out(1.5)' }, '-=0.4')
-      .from('.hero-logo', { scale: 0.8, opacity: 0, duration: 1.2, ease: 'power4.out' }, '-=1');
+    tl.from('.hero-elem', { y: 30, opacity: 0, duration: 1, stagger: 0.2 })
+      .from('.hero-logo', { scale: 0.9, opacity: 0, duration: 1.2, ease: 'power2.out' }, '-=0.8');
   }, { scope: container });
 
   return (
-    <div ref={container} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 md:px-12 flex-grow max-w-screen-2xl mx-auto items-stretch w-full pb-12 pt-2">
-      <div className="flex flex-col items-start z-20 lg:col-span-7 py-2">
+    <div ref={container} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 md:px-12 flex-grow max-w-screen-2xl mx-auto items-stretch w-full pb-12 pt-32">
+      <div className="flex flex-col items-start justify-center z-20 lg:col-span-7 py-2">
         <div>
-          <h1 className="hero-title text-5xl sm:text-7xl lg:text-[7.5rem] font-black uppercase leading-[0.85] tracking-tighter w-full pt-8 lg:pt-12">
+          <h1 className="hero-elem text-5xl sm:text-7xl lg:text-[7.5rem] font-black uppercase leading-[0.85] tracking-tighter w-full pt-8 lg:pt-12">
             We do <br/> things <br/>
             <span className="text-[#cda434]">
               <span className="text-white opacity-30 font-light mr-2">/</span>
               DIFF
             </span>ERENTLY
           </h1>
-          <p className="hero-desc text-base md:text-lg text-gray-400 max-w-md leading-relaxed font-light tracking-wide border-l-2 border-[#cda434] pl-6 ml-1 mt-6 lg:mt-8">
-            Pioneering the future of industry. Join a community of driven professionals and access unparalleled opportunities to elevate your career.
+          <p className="hero-elem text-base md:text-lg text-gray-400 max-w-md leading-relaxed font-light tracking-wide border-l-2 border-[#cda434] pl-6 ml-1 mt-6 lg:mt-8">
+            Discover opportunities to grow your career with a company behind some of the Philippines' recognizable food and restaurant brands.
           </p>
         </div>
-        <Link to="/connect" className="hero-btn inline-block px-10 py-5 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#cda434] hover:text-white transition-colors duration-300 mt-6 lg:mt-8">
+        <Link to="/connect" className="hero-elem inline-block px-10 py-5 bg-white text-black font-bold uppercase tracking-widest text-xs hover:bg-[#cda434] hover:text-white transition-colors duration-300 mt-6 lg:mt-8">
           Contact us
         </Link>
       </div>
