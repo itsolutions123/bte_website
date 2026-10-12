@@ -62,7 +62,7 @@ function removeWhiteBgAndCrop(url) {
 
 function Navigation() {
   const location = useLocation();
-  const isHome = location.pathname === '/' || location.pathname === '/home';
+  const isHome = location.pathname === '/';
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -74,9 +74,31 @@ function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (!isHome) return null;
+  // For sub-pages like /careers or /connect, just show a simple back navigation
+  if (!isHome) {
+    return (
+      <header className="relative z-50 flex justify-between items-center p-6 md:p-12 max-w-screen-2xl mx-auto w-full">
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
+          </Link>
+          <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE</span>
+        </div>
+        <Link to="/" className="text-xs font-bold tracking-[0.2em] uppercase text-gray-500 hover:text-white transition-colors duration-300">
+          Back to Home
+        </Link>
+      </header>
+    );
+  }
 
   const isCollapsed = isScrolled && !isHovered;
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <header 
@@ -85,17 +107,16 @@ function Navigation() {
       className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 md:p-12 max-w-screen-2xl mx-auto w-full transition-transform duration-500 ease-in-out ${isCollapsed ? '-translate-y-full' : 'translate-y-0'}`}
     >
       <div className="flex items-center gap-4 nav-elem">
-        <Link to="/">
+        <button onClick={() => scrollToSection('home')} className="flex items-center gap-4 cursor-pointer">
           <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
-        </Link>
-        <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE</span>
+          <span className="font-bold text-sm tracking-[0.3em] uppercase hidden md:block text-gray-300">BIGTIME EMPIRE</span>
+        </button>
       </div>
       <nav className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
-        <Link to="/home" className="hover:text-white transition-colors duration-300 nav-elem">Home</Link>
-        <Link to="/jobs" className="hover:text-white transition-colors duration-300 nav-elem">Careers</Link>
-        <Link to="/about" className="hover:text-white transition-colors duration-300 nav-elem">About Us</Link>
-        <Link to="/brands" className="hover:text-white transition-colors duration-300 nav-elem">Brands</Link>
-        <Link to="/community" className="hover:text-white transition-colors duration-300 nav-elem">Community</Link>
+        <button onClick={() => scrollToSection('home')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Home</button>
+        <button onClick={() => scrollToSection('careers-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Careers</button>
+        <button onClick={() => scrollToSection('brands-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Brands</button>
+        <button onClick={() => scrollToSection('community-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Community</button>
       </nav>
     </header>
   );
@@ -116,7 +137,7 @@ function Home() {
   }, { scope: container });
 
   return (
-    <div ref={container} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 md:px-12 flex-grow max-w-screen-2xl mx-auto items-stretch w-full pb-12 pt-32">
+    <div id="home" ref={container} className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 px-6 md:px-12 max-w-screen-2xl mx-auto items-stretch w-full min-h-[90vh] pb-12 pt-32">
       <div className="flex flex-col items-start justify-center z-20 lg:col-span-7 py-2">
         <div>
           <h1 className="hero-elem text-5xl sm:text-7xl lg:text-[7.5rem] font-black uppercase leading-[0.85] tracking-tighter w-full pt-8 lg:pt-12">
@@ -143,6 +164,52 @@ function Home() {
   );
 }
 
+function CareersSection() {
+  const container = useRef();
+
+  useGSAP(() => {
+    gsap.utils.toArray('.career-highlight').forEach((el) => {
+      gsap.from(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out'
+      });
+    });
+  }, { scope: container });
+
+  return (
+    <div id="careers-section" ref={container} className="relative z-10 flex flex-col items-center justify-start px-6 md:px-12 pt-12 pb-32 max-w-screen-xl mx-auto w-full border-t border-white/10">
+      
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">Career Growth</h2>
+        <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Opportunities to learn and develop professionally.</p>
+      </div>
+
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">A Growing Portfolio</h2>
+        <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Work with teams across multiple restaurant brands.</p>
+      </div>
+
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">Join Our Team</h2>
+        <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Find a position that matches your skills and experience.</p>
+      </div>
+
+      <div className="career-highlight flex items-center justify-center min-h-[40vh] w-full">
+        <Link to="/careers" className="inline-block px-14 py-6 bg-transparent border-2 border-white text-white font-bold uppercase tracking-widest text-lg hover:bg-[#cda434] hover:border-[#cda434] hover:text-black transition-all duration-300">
+          JOIN OUR TEAM
+        </Link>
+      </div>
+      
+    </div>
+  );
+}
+
 function Connect() {
   const navigate = useNavigate();
 
@@ -154,10 +221,10 @@ function Connect() {
   };
 
   return (
-    <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-6 py-12 max-w-3xl mx-auto w-full">
+    <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-6 py-12 max-w-3xl mx-auto w-full min-h-screen">
       <div className="w-full mb-8">
-        <button 
-          onClick={() => navigate(-1)} 
+        <button
+          onClick={() => navigate(-1)}
           className="w-12 h-12 flex items-center justify-center border border-gray-600 hover:border-[#cda434] text-gray-400 hover:text-white transition-colors duration-300"
           aria-label="Go back"
         >
@@ -218,34 +285,34 @@ const initialJobListings = [
   }
 ];
 
-function Jobs() {
+function Careers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedJob, setSelectedJob] = useState(initialJobListings[0]);
 
-  const filteredJobs = initialJobListings.filter(job => 
+  const filteredJobs = initialJobListings.filter(job =>
     job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="relative z-10 flex-grow flex flex-col px-6 md:px-12 py-8 max-w-screen-2xl mx-auto w-full gap-8">
+    <div className="relative z-10 flex-grow flex flex-col px-6 md:px-12 py-32 max-w-screen-2xl mx-auto w-full gap-8 min-h-screen">
       <div className="flex justify-end w-full">
-        <input 
-          type="text" 
-          placeholder="SEARCH BY KEYWORD" 
+        <input
+          type="text"
+          placeholder="SEARCH BY KEYWORD"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="bg-transparent border border-gray-600 p-3 text-white focus:border-[#cda434] outline-none transition-colors w-full md:w-1/3 text-xs uppercase tracking-widest font-bold"
         />
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="flex flex-col gap-4 border-r border-gray-800 pr-0 lg:pr-8">
           <h2 className="text-xl font-bold uppercase tracking-widest text-[#cda434] mb-4">Job Summary</h2>
           <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh] pr-2">
             {filteredJobs.map(job => (
-              <div 
-                key={job.id} 
+              <div
+                key={job.id}
                 onClick={() => setSelectedJob(job)}
                 className={`p-6 border cursor-pointer transition-all duration-300 ${selectedJob?.id === job.id ? 'border-[#cda434] bg-[#cda434]/10' : 'border-gray-600 hover:border-gray-400'}`}
               >
@@ -265,7 +332,7 @@ function Jobs() {
             <div className="flex flex-col gap-6">
               <h3 className="text-4xl font-black uppercase tracking-widest text-[#cda434]">{selectedJob.title}</h3>
               <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.description}</p>
-              
+
               <div className="mt-4">
                 <h4 className="text-lg font-bold text-[#cda434] mb-2 uppercase tracking-wider">Requirements:</h4>
                 <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.requirements}</p>
@@ -282,11 +349,18 @@ function Jobs() {
   );
 }
 
-function Community() {
+function MainPage() {
   return (
-    <div className="relative z-10 flex-grow flex items-center justify-center">
-      <h1 className="text-4xl font-black uppercase tracking-widest text-white">Community <span className="text-[#cda434]">Coming Soon</span></h1>
-    </div>
+    <>
+      <Home />
+      <CareersSection />
+      <div id="brands-section" className="relative z-20 min-h-[70vh] py-24 border-t border-white/10">
+        <BrandsSection />
+      </div>
+      <div id="community-section" className="relative z-10 flex items-center justify-center min-h-[50vh] border-t border-white/10">
+        <h1 className="text-4xl font-black uppercase tracking-widest text-white">Community <span className="text-[#cda434]">Coming Soon</span></h1>
+      </div>
+    </>
   );
 }
 
@@ -303,12 +377,9 @@ function App() {
         <div className="fixed top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-[#cda434] opacity-10 blur-[150px] rounded-full pointer-events-none"></div>
         <Navigation />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/connect" element={<Connect />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/brands" element={<div className="relative z-20"><BrandsSection /></div>} />
+          <Route path="/careers" element={<Careers />} />
         </Routes>
       </div>
     </Router>
