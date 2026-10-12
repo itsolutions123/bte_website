@@ -22,3 +22,7 @@
 - Created AboutSection.jsx with Company History, Mission/Vision, and Core Values using GSAP scroll animations.
 - Integrated into App.jsx below the Home hero.
 - Added 'About' link to Navigation.
+
+## [2026-10-12] Fix: Navigation Bar Behavior
+- Added global mousemove listener to slide the navbar down when the cursor enters the top 50px of the viewport.
+- Navbar now properly slides out when not in use but is always accessible via top-edge hover or when at the top of the page.

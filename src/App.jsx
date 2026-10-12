@@ -75,6 +75,16 @@ function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (e.clientY <= 50) {
+        setIsHovered(true);
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   // For sub-pages like /careers or /connect, just show a simple back navigation
   if (!isHome) {
     return (

@@ -11,3 +11,5 @@
 - Implemented interactive Jobs board matching wireframe
 
 - **About Us Section**: Deployed AboutSection.jsx to the main page.
+
+- **Navigation Fix**: Navbar now triggers via top-edge mouse proximity when scrolled down.
