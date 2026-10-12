@@ -15,3 +15,5 @@
 - **Navigation Fix**: Navbar now triggers via top-edge mouse proximity when scrolled down.
 
 - **UI Polish**: Fixed solid background blocking the ambient glow on About and Brands sections.
+
+- **Careers Section Fix**: Corrected scroll spacing and matched 'JOIN US' button with the wireframe.

@@ -30,3 +30,7 @@
 ## [2026-10-12] Fix: Section Backgrounds
 - Changed AboutSection and BrandsSection outer backgrounds from solid black to transparent.
 - This allows the global ambient golden glow to seamlessly flow down the page without harsh visual cuts.
+
+## [2026-10-12] Fix: Careers Layout & Button
+- Adjusted career highlight blocks to take up full viewport height (min-h-screen) so only one heading appears per scroll.
+- Grouped the 'Join Our Team' button into its parent text block, updated the text to 'JOIN US', and added rounded corners to match the design wireframe.

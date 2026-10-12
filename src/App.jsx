@@ -197,24 +197,21 @@ function CareersSection() {
   return (
     <div id="careers-section" ref={container} className="relative z-10 flex flex-col items-center justify-start px-6 md:px-12 pt-12 pb-32 max-w-screen-xl mx-auto w-full border-t border-white/10">
       
-      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-screen justify-center w-full">
         <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">Career Growth</h2>
         <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Opportunities to learn and develop professionally.</p>
       </div>
 
-      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-screen justify-center w-full">
         <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">A Growing Portfolio</h2>
         <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Work with teams across multiple restaurant brands.</p>
       </div>
 
-      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-[60vh] justify-center w-full">
+      <div className="career-highlight flex flex-col gap-6 items-center text-center min-h-screen justify-center w-full">
         <h2 className="text-5xl md:text-7xl font-black uppercase tracking-widest text-[#cda434]">Join Our Team</h2>
         <p className="text-gray-300 font-light tracking-wide text-lg md:text-2xl">Find a position that matches your skills and experience.</p>
-      </div>
-
-      <div className="career-highlight flex items-center justify-center min-h-[40vh] w-full">
-        <Link to="/careers" className="inline-block px-14 py-6 bg-transparent border-2 border-white text-white font-bold uppercase tracking-widest text-lg hover:bg-[#cda434] hover:border-[#cda434] hover:text-black transition-all duration-300">
-          JOIN OUR TEAM
+        <Link to="/careers" className="mt-4 inline-block px-12 py-4 bg-transparent border-2 border-white text-white font-bold uppercase tracking-widest text-base rounded-lg hover:bg-[#cda434] hover:border-[#cda434] hover:text-black transition-all duration-300">
+          JOIN US
         </Link>
       </div>
       
