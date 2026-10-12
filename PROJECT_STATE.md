@@ -9,3 +9,5 @@
 - **Deployment:** Static Vite build served from /opt/stacks/bte-website/html/ via Nginx with custom try_files routing fallback.
 - Added /connect route and Contact form feature
 - Implemented interactive Jobs board matching wireframe
+
+- **About Us Section**: Deployed AboutSection.jsx to the main page.

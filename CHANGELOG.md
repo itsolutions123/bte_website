@@ -17,3 +17,8 @@
 - 2026-10-09: Added custom Nginx configuration to support SPA routing and fix 404s on page refresh.
 - 2026-10-09: Added /connect page with static mailto form and updated Home button routing
 - 2026-10-09: Replaced /jobs placeholder with dynamic client-side Jobs board featuring search, summary list, and detail view
+
+## [2026-10-12] Feature: About Us Section
+- Created AboutSection.jsx with Company History, Mission/Vision, and Core Values using GSAP scroll animations.
+- Integrated into App.jsx below the Home hero.
+- Added 'About' link to Navigation.

@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import bteHd from './assets/bte_hd.jpeg';
 import BrandsSection from './components/BrandsSection';
+import AboutSection from './components/AboutSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -114,6 +115,7 @@ function Navigation() {
       </div>
       <nav className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
         <button onClick={() => scrollToSection('home')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Home</button>
+        <button onClick={() => scrollToSection('about-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">About</button>
         <button onClick={() => scrollToSection('careers-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Careers</button>
         <button onClick={() => scrollToSection('brands-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Brands</button>
         <button onClick={() => scrollToSection('community-section')} className="hover:text-white transition-colors duration-300 nav-elem cursor-pointer uppercase">Community</button>
@@ -353,6 +355,7 @@ function MainPage() {
   return (
     <>
       <Home />
+      <AboutSection />
       <CareersSection />
       <div id="brands-section" className="relative z-20 min-h-[70vh] py-24 border-t border-white/10">
         <BrandsSection />
