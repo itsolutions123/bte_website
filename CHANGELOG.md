@@ -26,3 +26,7 @@
 ## [2026-10-12] Fix: Navigation Bar Behavior
 - Added global mousemove listener to slide the navbar down when the cursor enters the top 50px of the viewport.
 - Navbar now properly slides out when not in use but is always accessible via top-edge hover or when at the top of the page.
+
+## [2026-10-12] Fix: Section Backgrounds
+- Changed AboutSection and BrandsSection outer backgrounds from solid black to transparent.
+- This allows the global ambient golden glow to seamlessly flow down the page without harsh visual cuts.

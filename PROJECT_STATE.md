@@ -13,3 +13,5 @@
 - **About Us Section**: Deployed AboutSection.jsx to the main page.
 
 - **Navigation Fix**: Navbar now triggers via top-edge mouse proximity when scrolled down.
+
+- **UI Polish**: Fixed solid background blocking the ambient glow on About and Brands sections.

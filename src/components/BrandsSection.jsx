@@ -134,7 +134,7 @@ export default function BrandsSection() {
   }, [emblaTextApi]);
 
   return (
-    <section id="brands" ref={containerRef} className="py-20 bg-[#050505] flex flex-col items-center min-h-[90svh] justify-center w-full overflow-hidden border-t border-white/5">
+    <section id="brands" ref={containerRef} className="py-20 bg-transparent flex flex-col items-center min-h-[90svh] justify-center w-full overflow-hidden border-t border-white/5">
       <div className="w-full max-w-screen-2xl mx-auto px-6 md:px-12 flex flex-col h-full justify-center">
 
         <div className="brands-title w-full text-center mb-16 overflow-hidden">

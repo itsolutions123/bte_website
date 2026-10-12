@@ -25,7 +25,7 @@ export default function AboutSection() {
   }, { scope: container });
 
   return (
-    <section id="about-section" ref={container} className="relative z-10 py-32 border-t border-white/10 bg-[#050505] w-full flex flex-col items-center">
+    <section id="about-section" ref={container} className="relative z-10 py-32 border-t border-white/10 bg-transparent w-full flex flex-col items-center">
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 w-full flex flex-col gap-16">
         
         {/* Heading & Overview */}
