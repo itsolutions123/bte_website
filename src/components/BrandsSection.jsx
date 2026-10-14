@@ -5,60 +5,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import useEmblaCarousel from 'embla-carousel-react';
 
 import tsgLogoRaw from '../assets/tsg_hd.jpeg';
-import prLogoRaw from '../assets/pr_hd.jpeg';
+import prLogoRaw from '../assets/pr_hd.png';
 import sapporoLogoRaw from '../assets/sapporo_hd.png';
 import pansolLogoRaw from '../assets/pansol_hd.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function removeBg(url, removeType) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imgData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const r = data[i], g = data[i + 1], b = data[i + 2];
-        if (removeType === 'black' && r < 35 && g < 35 && b < 35) {
-          data[i + 3] = 0;
-        } else if (removeType === 'white' && r > 220 && g > 220 && b > 220) {
-          data[i + 3] = 0;
-        }
-      }
-      ctx.putImageData(imgData, 0, 0);
-      resolve(canvas.toDataURL());
-    };
-    img.onerror = () => resolve(url);
-    img.src = url;
-  });
-}
-
-const rawBrands = [
-  { name: "THE SANDWICH GUY", logo: tsgLogoRaw, removeType: 'none' },
-  { name: "PARES RETIRO", logo: prLogoRaw, removeType: 'black' },
-  { name: "SAPPORO MILKTEA", logo: sapporoLogoRaw, removeType: 'none' },
-  { name: "CALIFORNIA BEACH PANSOL", logo: pansolLogoRaw, removeType: 'none' }
+const brands = [
+  { name: "THE SANDWICH GUY", logo: tsgLogoRaw, blend: 'normal' },
+  { name: "PARES RETIRO", logo: prLogoRaw, blend: 'normal' },
+  { name: "SAPPORO MILKTEA", logo: sapporoLogoRaw, blend: 'normal' },
+  { name: "CALIFORNIA BEACH PANSOL", logo: pansolLogoRaw, blend: 'normal' }
 ];
 
 export default function BrandsSection() {
-  const [processedLogos, setProcessedLogos] = useState({});
   const containerRef = useRef(null);
-
-  useEffect(() => {
-    rawBrands.forEach((b) => {
-      if (b.removeType !== 'none') {
-        removeBg(b.logo, b.removeType).then((cleanedUrl) => {
-          setProcessedLogos((prev) => ({ ...prev, [b.name]: cleanedUrl }));
-        });
-      }
-    });
-  }, []);
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -85,11 +46,6 @@ export default function BrandsSection() {
         "-=0.6"
       );
   }, { scope: containerRef });
-
-  const brands = rawBrands.map((b) => ({
-    ...b,
-    logo: processedLogos[b.name] || b.logo
-  }));
 
   const [emblaTextRef, emblaTextApi] = useEmblaCarousel({
     loop: true,
@@ -145,7 +101,6 @@ export default function BrandsSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center w-full">
 
-          {/* Left Side: 5 Columns */}
           <div className="brands-text-col lg:col-span-5 h-[350px] overflow-hidden relative" ref={emblaTextRef}>
             <div className="flex flex-col h-full">
               {brands.map((brand, index) => (
@@ -166,7 +121,6 @@ export default function BrandsSection() {
             <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10"></div>
           </div>
 
-          {/* Right Side: 7 Columns */}
           <div className="brands-logo-col lg:col-span-7 flex flex-col items-center lg:items-end justify-center relative h-[450px] lg:pr-8">
             <div className="w-full h-full overflow-hidden" ref={emblaLogoRef}>
               <div className="flex h-full">
@@ -176,7 +130,7 @@ export default function BrandsSection() {
                       <img
                         src={brand.logo}
                         alt={brand.name}
-                        className="max-h-[350px] max-w-[500px] object-contain"
+                        className={`max-h-[350px] max-w-[500px] object-contain ${brand.blend === 'screen' ? 'mix-blend-screen' : ''}`}
                       />
                     </div>
                   </div>
