@@ -220,30 +220,40 @@ function Connect() {
   );
 }
 
-const initialJobListings = [
-  {
-    id: 1,
-    title: "ADMIN ASSISTANT",
-    salary: "UP TO 25,000",
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut et id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore",
-    requirements: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore"
-  },
-  {
-    id: 2,
-    title: "AREA MANAGER",
-    salary: "UP TO 30,000",
-    description: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut et id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore",
-    requirements: "lorem ipsum dolor sit amet consectetur adipiscing elit nobis accusamus et in cupidatat iusto nulla id officia atque in est dolore officia optio optio laborum eiusmod ut id possimus voluptatum ullamco qui blanditiis expedita atque et et est est sunt omnis labore animi vel autem voluptas consectetur soluta dolore"
-  }
-];
+const PUBLIC_JOBS_API = "http://10.0.10.37:8000/api/v1/public/jobs";
+const APPLY_URL = "http://10.0.10.37:8000/apply";
 
 function Careers() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedJob, setSelectedJob] = useState(initialJobListings[0]);
+  const [jobs, setJobs] = useState([]);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [loadState, setLoadState] = useState('loading'); // 'loading' | 'ready' | 'error'
 
-  const filteredJobs = initialJobListings.filter(job =>
+  useEffect(() => {
+    let cancelled = false;
+    fetch(PUBLIC_JOBS_API)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (cancelled) return;
+        const list = data.data || [];
+        setJobs(list);
+        setSelectedJob(list[0] || null);
+        setLoadState('ready');
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLoadState('error');
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const filteredJobs = jobs.filter(job =>
     job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    job.description.toLowerCase().includes(searchQuery.toLowerCase())
+    (job.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (job.brand_name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -258,21 +268,28 @@ function Careers() {
         />
       </div>
 
+      {loadState === 'error' && (
+        <p className="text-red-400 text-sm uppercase tracking-widest">Could not load job postings. Please try again later.</p>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="flex flex-col gap-4 border-r border-gray-800 pr-0 lg:pr-8">
           <h2 className="text-xl font-bold uppercase tracking-widest text-[#cda434] mb-4">Job Summary</h2>
           <div className="flex flex-col gap-4 overflow-y-auto max-h-[60vh] pr-2">
-            {filteredJobs.map(job => (
+            {loadState === 'loading' && (
+              <p className="text-gray-500 text-sm italic">Loading job postings...</p>
+            )}
+            {loadState === 'ready' && filteredJobs.map(job => (
               <div
                 key={job.id}
                 onClick={() => setSelectedJob(job)}
                 className={`p-6 border cursor-pointer transition-all duration-300 ${selectedJob?.id === job.id ? 'border-[#cda434] bg-[#cda434]/10' : 'border-gray-600 hover:border-gray-400'}`}
               >
                 <h3 className="text-lg font-bold uppercase tracking-wider text-white">{job.title}</h3>
-                <p className="text-sm text-gray-400 mt-2 uppercase tracking-wide">Monthly: {job.salary}</p>
+                <p className="text-sm text-gray-400 mt-2 uppercase tracking-wide">{job.brand_name}</p>
               </div>
             ))}
-            {filteredJobs.length === 0 && (
+            {loadState === 'ready' && filteredJobs.length === 0 && (
               <p className="text-gray-500 text-sm italic">No jobs found matching your keyword.</p>
             )}
           </div>
@@ -283,16 +300,24 @@ function Careers() {
           {selectedJob ? (
             <div className="flex flex-col gap-6">
               <h3 className="text-4xl font-black uppercase tracking-widest text-[#cda434]">{selectedJob.title}</h3>
+              <p className="text-sm text-gray-500 uppercase tracking-widest">{selectedJob.brand_name}</p>
               <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.description}</p>
 
               <div className="mt-4">
                 <h4 className="text-lg font-bold text-[#cda434] mb-2 uppercase tracking-wider">Requirements:</h4>
                 <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.requirements}</p>
               </div>
+
+              <a
+                href={`${APPLY_URL}?job_id=${selectedJob.id}`}
+                className="mt-6 inline-block w-fit px-12 py-4 bg-[#cda434] text-black font-bold uppercase tracking-widest text-sm hover:bg-white transition-colors duration-300"
+              >
+                Apply Now
+              </a>
             </div>
           ) : (
             <div className="flex items-center justify-center flex-grow text-gray-500 uppercase tracking-widest text-xs">
-              Select a job to view details
+              {loadState === 'loading' ? 'Loading...' : 'Select a job to view details'}
             </div>
           )}
         </div>
