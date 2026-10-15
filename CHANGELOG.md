@@ -34,3 +34,9 @@
 ## [2026-10-12] Fix: Careers Layout & Button
 - Adjusted career highlight blocks to take up full viewport height (min-h-screen) so only one heading appears per scroll.
 - Grouped the 'Join Our Team' button into its parent text block, updated the text to 'JOIN US', and added rounded corners to match the design wireframe.
+
+## 2026-10-15 - Careers: description and requirements rendering
+- Careers job detail now renders `description` and `requirements` as HTML (cleaned server-side by bte_webapp); older plain-text postings still show their line breaks and bullets (`whitespace-pre-line`).
+- Keyword search compares plain text (HTML parsed with `DOMParser`), so tags never match.
+- Added `.rich-text` styles in `src/index.css` for lists, `ql-indent-1` to `ql-indent-8` and `ql-size-small|large|huge` (values are estimates, to be compared against real editor output).
+- Rebuilt and copied to `html/` (bundles `index-C6NvnbNu.js`, `index-Ry0KgoxO.css`). Verified in the browser with legacy plain text and search; NOT tested with formatted HTML (no job has any yet).

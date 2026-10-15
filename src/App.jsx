@@ -223,6 +223,11 @@ function Connect() {
 const PUBLIC_JOBS_API = "http://10.0.10.37:8000/api/v1/public/jobs";
 const APPLY_URL = "http://10.0.10.37:8000/apply";
 
+// Descriptions and requirements are stored as cleaned HTML (server-side allowlist);
+// older postings are plain text. Search compares plain text, never tags or entities.
+const htmlToText = (value) =>
+  new DOMParser().parseFromString(value || '', 'text/html').body.textContent || '';
+
 function Careers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [jobs, setJobs] = useState([]);
@@ -252,7 +257,7 @@ function Careers() {
 
   const filteredJobs = jobs.filter(job =>
     job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (job.description || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    htmlToText(job.description).toLowerCase().includes(searchQuery.toLowerCase()) ||
     (job.brand_name || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -301,11 +306,11 @@ function Careers() {
             <div className="flex flex-col gap-6">
               <h3 className="text-4xl font-black uppercase tracking-widest text-[#cda434]">{selectedJob.title}</h3>
               <p className="text-sm text-gray-500 uppercase tracking-widest">{selectedJob.brand_name}</p>
-              <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.description}</p>
+              <div className="rich-text text-gray-300 leading-relaxed font-light tracking-wide whitespace-pre-line" dangerouslySetInnerHTML={{ __html: selectedJob.description || '' }} />
 
               <div className="mt-4">
                 <h4 className="text-lg font-bold text-[#cda434] mb-2 uppercase tracking-wider">Requirements:</h4>
-                <p className="text-gray-300 leading-relaxed font-light tracking-wide">{selectedJob.requirements}</p>
+                <div className="rich-text text-gray-300 leading-relaxed font-light tracking-wide whitespace-pre-line" dangerouslySetInnerHTML={{ __html: selectedJob.requirements || '' }} />
               </div>
 
               <a

@@ -5,3 +5,21 @@ body {
   background-color: #0a0a0a;
   color: #ffffff;
 }
+
+/* Job description and requirements: cleaned HTML from the admin editor.
+   Tailwind's reset removes list and paragraph styles, so they are restored here. */
+.rich-text p { margin: 0; }
+.rich-text ul { list-style: disc outside; padding-left: 1.5em; margin: 0; }
+.rich-text ol { list-style: decimal outside; padding-left: 1.5em; margin: 0; }
+.rich-text strong { font-weight: 700; }
+.rich-text .ql-size-small { font-size: 0.75em; }
+.rich-text .ql-size-large { font-size: 1.5em; }
+.rich-text .ql-size-huge { font-size: 2.5em; }
+.rich-text .ql-indent-1 { padding-left: 3em; }
+.rich-text .ql-indent-2 { padding-left: 6em; }
+.rich-text .ql-indent-3 { padding-left: 9em; }
+.rich-text .ql-indent-4 { padding-left: 12em; }
+.rich-text .ql-indent-5 { padding-left: 15em; }
+.rich-text .ql-indent-6 { padding-left: 18em; }
+.rich-text .ql-indent-7 { padding-left: 21em; }
+.rich-text .ql-indent-8 { padding-left: 24em; }
