@@ -23,4 +23,10 @@
 - **Search:** uses `htmlToText` (DOMParser), so it matches visible text only.
 - **Deploy steps (confirmed this session):** `npm run build`, then `cp -a dist/. html/` (no container restart; nginx reads `html/` read-only). Old bundles are not deleted automatically.
 - **Hardcodes (flagged, not touched):** API and apply URLs at `src/App.jsx` (PUBLIC_JOBS_API, APPLY_URL, `http://10.0.10.37:8000`).
-- **Open:** `.rich-text` size and indent values are estimates; unused bundles `index-D5-N3DX5.css`, `index-DoCeN0M_.js` (and older ones) remain in `html/assets`; the "Assets" line above is outdated (canvas removal was removed).
+- **Open:** indent on bullets not yet seen on the page (sizes and numbered-list indent verified 2026-10-15); unused bundles `index-D5-N3DX5.css`, `index-DoCeN0M_.js` (and older ones) remain in `html/assets`; the "Assets" line above is outdated (canvas removal was removed).
+
+## 2026-10-15 - Careers: list indent fix (rich text)
+- **Fixed:** `.rich-text .ql-indent-1` to `-8` in `src/index.css` use `margin-left` instead of `padding-left`, so a numbered item's marker moves with its text (verified in the browser with a numbered list).
+- **Verified in the browser:** formatted jobs saved from the bte_webapp editor render on `/careers`: bold, bullets, numbered list, Small, Large and Huge sizes, and indent on a numbered list. Not seen: indent on bullets.
+- **Deploy:** `npm run build`, then `cp -a dist/. html/` (no container restart). New bundles `index-CJtO14ls.css` and `index-BSsFp4P7.js`; `html/index.html` references them. The copy output was not pasted; the fix was confirmed in the browser.
+- **Hardcodes:** none new (the API and apply URLs in `src/App.jsx` remain flagged, not touched).
