@@ -30,3 +30,11 @@
 - **Verified in the browser:** formatted jobs saved from the bte_webapp editor render on `/careers`: bold, bullets, numbered list, Small, Large and Huge sizes, and indent on a numbered list. Not seen: indent on bullets.
 - **Deploy:** `npm run build`, then `cp -a dist/. html/` (no container restart). New bundles `index-CJtO14ls.css` and `index-BSsFp4P7.js`; `html/index.html` references them. The copy output was not pasted; the fix was confirmed in the browser.
 - **Hardcodes:** none new (the API and apply URLs in `src/App.jsx` remain flagged, not touched).
+
+## 2026-10-19 - Careers: Job Details block (shell), pay/location placeholders on job cards
+- Job summary cards (left list) now show pay and location placeholder lines under the brand name.
+- Job detail panel adds a "Job Details" row above the description: Pay, Type of Job, Location, each with an inline SVG icon (money/peso, briefcase, map pin). No background box — removed per user feedback after an initial boxed version; icons sit directly on the transparent panel.
+- Shell only: all three fields show a placeholder "—", not yet wired to the live API's `location`, `pay_information`, `job_type` fields (bte_webapp already returns these per its 2026-10-16 session).
+- Icons are inline SVG written directly in `src/App.jsx` — no external icon library, consistent with the local-only, no-CDN scope (same rule that led to vendoring Quill in bte_webapp).
+- Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
+- Open: wiring the three fields to real `selectedJob.location`, `selectedJob.pay_information`, `selectedJob.job_type` values (next step); several stale/unused bundles from prior builds remain untracked in `html/assets` (cleanup not yet decided, see this session's commit discussion).

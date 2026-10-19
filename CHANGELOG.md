@@ -41,3 +41,9 @@
 - Added `.rich-text` styles in `src/index.css` for lists, `ql-indent-1` to `ql-indent-8` and `ql-size-small|large|huge` (values are estimates, to be compared against real editor output).
 - Rebuilt and copied to `html/` (bundles `index-C6NvnbNu.js`, `index-Ry0KgoxO.css`). Verified in the browser with legacy plain text and search; NOT tested with formatted HTML (no job has any yet).
 - 2026-10-15: Careers rich text: list indent classes use margin-left so numbers move with their text; rebuilt and copied to html/ (bundles index-CJtO14ls.css, index-BSsFp4P7.js). Verified in the browser with real formatted jobs (bold, bullets, numbered list, sizes, numbered-list indent); indent on bullets not seen.
+
+## 2026-10-19 - Careers: Job Details shell (pay, location, type of job)
+- Added pay and location placeholder lines to job summary cards.
+- Added a "Job Details" block to the job detail panel (Pay, Type of Job, Location) with inline SVG icons, no background box.
+- Shell only — fields are not yet wired to the API's real `location`, `pay_information`, `job_type` values.
+- Rebuilt and copied to `html/`.
