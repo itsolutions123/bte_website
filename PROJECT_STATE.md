@@ -38,3 +38,11 @@
 - Icons are inline SVG written directly in `src/App.jsx` — no external icon library, consistent with the local-only, no-CDN scope (same rule that led to vendoring Quill in bte_webapp).
 - Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
 - Open: wiring the three fields to real `selectedJob.location`, `selectedJob.pay_information`, `selectedJob.job_type` values (next step); several stale/unused bundles from prior builds remain untracked in `html/assets` (cleanup not yet decided, see this session's commit discussion).
+
+## 2026-10-19 - Careers: Job Details wired to the live API (pay, location, type of job)
+- HANDOFF SUMMARY: work mode = feature-wiring, verified in the browser. Page/step: `/careers` job summary cards and job full detail. Backend: no change (bte_webapp `GET /api/v1/public/jobs` already returns `location`, `pay_information` and `job_type`). Frontend: `src/App.jsx` only. Supersedes the "Open: wiring the three fields" line in the shell section above.
+- DONE: job cards show a gold inline pay icon and a location icon with the real values (null pay shows "Pay information not provided", a null location line is hidden). The detail block shows only the values next to the icons (no "Pay:", "Type of Job:" or "Location:" labels); the type and location rows are hidden when null, a null pay shows "Pay information not provided". Values render as plain text through React (escaped, never HTML). Icons are small inline SVG components (`PayIcon`, `LocationIcon`) above `Careers()`.
+- VERIFIED in the browser: a job with all three set (pay, full-time, location) and jobs with no values (pay line only). NOT tested: a very long location (the webapp caps it at 150 characters); a job with a location but no pay.
+- Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
+- HARDCODES: removed the placeholder lines on the cards and the three "—" rows in the detail. Remaining and flagged, not touched: `PUBLIC_JOBS_API` and `APPLY_URL` (fixed LAN IP and port) in `src/App.jsx`; the pay and location SVG paths now exist both in the icon components and in the detail block.
+- OPEN: old unused bundles remain in `html/assets` (cleanup needs the user's confirmation naming the files); a stray file named `EOF` and `patch.js` sit in the repo root (not touched).

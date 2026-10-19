@@ -47,3 +47,5 @@
 - Added a "Job Details" block to the job detail panel (Pay, Type of Job, Location) with inline SVG icons, no background box.
 - Shell only — fields are not yet wired to the API's real `location`, `pay_information`, `job_type` values.
 - Rebuilt and copied to `html/`.
+
+- 2026-10-19: Careers: job cards and the job detail now show the real pay, location and type of job from the live public jobs API (plain text, no labels in the detail). A null pay shows "Pay information not provided"; a null location or type is hidden. Cards got inline pay and location icons. Rebuilt and copied to html/.

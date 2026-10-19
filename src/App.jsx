@@ -228,6 +228,19 @@ const APPLY_URL = "http://10.0.10.37:8000/apply";
 const htmlToText = (value) =>
   new DOMParser().parseFromString(value || '', 'text/html').body.textContent || '';
 
+const ICON_PROPS = { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "1.5", "aria-hidden": "true" };
+const PayIcon = ({ className }) => (
+  <svg className={className} {...ICON_PROPS}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h7a5 5 0 0 1 0 10H9m-3-5h9M6 13h9m-9 4h6" />
+  </svg>
+);
+const LocationIcon = ({ className }) => (
+  <svg className={className} {...ICON_PROPS}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s-7-6.2-7-11.2A7 7 0 0 1 19 9.8C19 14.8 12 21 12 21z" />
+    <circle cx="12" cy="9.8" r="2.2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 function Careers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [jobs, setJobs] = useState([]);
@@ -292,8 +305,8 @@ function Careers() {
               >
                 <h3 className="text-lg font-bold uppercase tracking-wider text-white">{job.title}</h3>
                 <p className="text-sm text-gray-400 mt-2 uppercase tracking-wide">{job.brand_name}</p>
-                <p className="text-xs text-gray-500 mt-2 uppercase tracking-wide">— pay placeholder —</p>
-                <p className="text-xs text-gray-500 uppercase tracking-wide">— location placeholder —</p>
+                <p className="text-xs text-gray-500 mt-2 uppercase tracking-wide flex items-center gap-2"><PayIcon className="w-4 h-4 text-[#cda434] shrink-0" /><span>{job.pay_information || 'Pay information not provided'}</span></p>
+                {job.location && <p className="text-xs text-gray-500 uppercase tracking-wide flex items-center gap-2"><LocationIcon className="w-4 h-4 text-[#cda434] shrink-0" /><span>{job.location}</span></p>}
               </div>
             ))}
             {loadState === 'ready' && filteredJobs.length === 0 && (
@@ -314,21 +327,25 @@ function Careers() {
                   <svg className="w-5 h-5 text-[#cda434] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 3h7a5 5 0 0 1 0 10H9m-3-5h9M6 13h9m-9 4h6" />
                   </svg>
-                  <span>Pay: —</span>
+                  <span>{selectedJob.pay_information || 'Pay information not provided'}</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300 uppercase tracking-wide">
-                  <svg className="w-5 h-5 text-[#cda434] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h18M3 7v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7M3 7l2-4h14l2 4M9 11v2m6-2v2" />
-                  </svg>
-                  <span>Type of Job: —</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm text-gray-300 uppercase tracking-wide">
-                  <svg className="w-5 h-5 text-[#cda434] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s-7-6.2-7-11.2A7 7 0 0 1 19 9.8C19 14.8 12 21 12 21z" />
-                    <circle cx="12" cy="9.8" r="2.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span>Location: —</span>
-                </div>
+                {selectedJob.job_type && (
+                  <div className="flex items-center gap-3 text-sm text-gray-300 uppercase tracking-wide">
+                    <svg className="w-5 h-5 text-[#cda434] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 7h18M3 7v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7M3 7l2-4h14l2 4M9 11v2m6-2v2" />
+                    </svg>
+                    <span>{selectedJob.job_type}</span>
+                  </div>
+                )}
+                {selectedJob.location && (
+                  <div className="flex items-center gap-3 text-sm text-gray-300 uppercase tracking-wide">
+                    <svg className="w-5 h-5 text-[#cda434] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s-7-6.2-7-11.2A7 7 0 0 1 19 9.8C19 14.8 12 21 12 21z" />
+                      <circle cx="12" cy="9.8" r="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span>{selectedJob.location}</span>
+                  </div>
+                )}
               </div>
 
               <div className="rich-text text-gray-300 leading-relaxed font-light tracking-wide whitespace-pre-line" dangerouslySetInnerHTML={{ __html: selectedJob.description || '' }} />
