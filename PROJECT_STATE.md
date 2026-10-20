@@ -46,3 +46,12 @@
 - Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
 - HARDCODES: removed the placeholder lines on the cards and the three "—" rows in the detail. Remaining and flagged, not touched: `PUBLIC_JOBS_API` and `APPLY_URL` (fixed LAN IP and port) in `src/App.jsx`; the pay and location SVG paths now exist both in the icon components and in the detail block.
 - OPEN: old unused bundles remain in `html/assets` (cleanup needs the user's confirmation naming the files); a stray file named `EOF` and `patch.js` sit in the repo root (not touched).
+
+## 2026-10-20 - Redesign: light theme and new landing layout (branch light-theme)
+- Work mode: redesign (frontend only). Pages: `/` (full rework), `/connect` and `/careers` (recolor only). Backend: no change. bte_webapp: not touched.
+- Branch: all of this is on `light-theme`, not merged to `main`. `html/` is tracked in git, so what nginx serves on 8086 follows the checked-out branch's `html/` files.
+- Source: `src/components/Landing.jsx` (new), `src/App.jsx`, `src/index.css`. `AboutSection.jsx` and `BrandsSection.jsx` were recolored but are no longer used. The old `CareersSection` function in `src/App.jsx` is also unused.
+- Design decisions: nav is Home / About Us / Careers / Community; the footer holds the Community anchor; the nav background is transparent.
+- Backups (outside the repo, in `~/backups/`): `bte-website-html-black-20261020` (original black site), `...-recolor-20261020`, `...-landing-20261020`, `...-navfix-20261020`, `...-footerfix-20261020`, `...-photos-20261020`. Rollback: `cp -a ~/backups/<name>/. /opt/stacks/bte-website/html/`.
+- HARDCODES (flagged, not changed): address, email and brand names are static text in `Landing.jsx`; Instagram and Facebook links are `#`; `/connect` still opens a `mailto:` to `hello@example.com`; `PUBLIC_JOBS_API` and `APPLY_URL` still use the fixed LAN IP and port.
+- OPEN: real social URLs; the real contact email for `/connect`; the "Current Status" section at the top of this file is not updated for the redesign; 19 old unused bundles remain untracked in `html/assets` (cleanup needs explicit confirmation naming the files); stray `EOF` and `patch.js` in the repo root; unused `App.css` (Vite starter code); soft scroll-snap also applies to `/careers` and `/connect` (check that scrolling feels right); the Community link only scrolls to the footer (no Community page yet).

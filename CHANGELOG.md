@@ -49,3 +49,13 @@
 - Rebuilt and copied to `html/`.
 
 - 2026-10-19: Careers: job cards and the job detail now show the real pay, location and type of job from the live public jobs API (plain text, no labels in the detail). A null pay shows "Pay information not provided"; a null location or type is hidden. Cards got inline pay and location icons. Rebuilt and copied to html/.
+
+## [2026-10-20] Redesign: light theme and new landing layout
+- Replaced the dark gold design with a light layout (white ground, ink #1f2a2e, green accent #2f6f5e, mint #e6f0ec, cream #f6f5f1), following the user's BTE_LANDING_PAGE mockup.
+- New `src/components/Landing.jsx`: LandingHero, BrandStrip (dark logo strip), BrandsIntro (three brand cards with photos), ValuesBand (Core Values / Mission / Vision), JoinCta, SiteFooter. `MainPage` in `src/App.jsx` now renders these.
+- Nav is now Home / About Us / Careers / Community, transparent background. Community scrolls to the footer.
+- Home, About Us and Careers sections are full-screen scroll targets (soft `scroll-snap-type: y proximity` in `src/index.css`); the values band and the footer are normal height.
+- Brand card photos imported from `src/assets` (`tsg1.jpeg`, `pr1.jpeg`, `pansol1.jpg`).
+- Recolored `/connect` and `/careers` to the light palette (class names only; the jobs API logic is unchanged).
+- Removed the gold glow blob and the black body background.
+- Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).

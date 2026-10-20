@@ -1,9 +1,13 @@
 @import "tailwindcss";
 
+html {
+  scroll-snap-type: y proximity;
+}
+
 body {
   margin: 0;
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #1f2a2e;
 }
 
 /* Job description and requirements: cleaned HTML from the admin editor.

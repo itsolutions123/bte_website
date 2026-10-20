@@ -90,12 +90,12 @@ export default function BrandsSection() {
   }, [emblaTextApi]);
 
   return (
-    <section id="brands" ref={containerRef} className="py-20 bg-transparent flex flex-col items-center min-h-[90svh] justify-center w-full overflow-hidden border-t border-white/5">
+    <section id="brands" ref={containerRef} className="py-20 bg-transparent flex flex-col items-center min-h-[90svh] justify-center w-full overflow-hidden border-t border-[#e4e7e5]">
       <div className="w-full max-w-screen-2xl mx-auto px-6 md:px-12 flex flex-col h-full justify-center">
 
         <div className="brands-title w-full text-center mb-16 overflow-hidden">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase text-white leading-tight tracking-tighter">
-            HOME OF <span className="text-[#cda434]">BIGTIME BRANDS!</span>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase text-[#1f2a2e] leading-tight tracking-tighter">
+            HOME OF <span className="text-[#2f6f5e]">BIGTIME BRANDS!</span>
           </h2>
         </div>
 
@@ -110,15 +110,15 @@ export default function BrandsSection() {
                   onClick={() => emblaTextApi?.scrollTo(index)}
                 >
                   <h3 className={`text-2xl lg:text-3xl xl:text-4xl font-bold transition-all duration-500 w-full text-center lg:text-left ${
-                    index === selectedIndex ? 'text-white scale-100 opacity-100' : 'text-gray-600 scale-95 opacity-40'
+                    index === selectedIndex ? 'text-[#1f2a2e] scale-100 opacity-100' : 'text-[#55646a] scale-95 opacity-50'
                   }`}>
                     {brand.name}
                   </h3>
                 </div>
               ))}
             </div>
-            <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-[#050505] to-transparent pointer-events-none z-10"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-[#050505] to-transparent pointer-events-none z-10"></div>
+            <div className="absolute top-0 left-0 right-0 h-1/4 bg-gradient-to-b from-white to-transparent pointer-events-none z-10"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-gradient-to-t from-white to-transparent pointer-events-none z-10"></div>
           </div>
 
           <div className="brands-logo-col lg:col-span-7 flex flex-col items-center lg:items-end justify-center relative h-[450px] lg:pr-8">
@@ -144,7 +144,7 @@ export default function BrandsSection() {
                   key={index}
                   onClick={() => emblaLogoApi?.scrollTo(index)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === selectedIndex ? 'bg-[#cda434] scale-125' : 'bg-gray-700 hover:bg-gray-500'
+                    index === selectedIndex ? 'bg-[#2f6f5e] scale-125' : 'bg-[#cfd6d3] hover:bg-[#9fb0aa]'
                   }`}
                 />
               ))}
