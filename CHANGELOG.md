@@ -66,3 +66,9 @@
 - All 16 photos in `src/assets/collage` are bundled via `import.meta.glob`; files not named in `collageColumns` are added round-robin, so new photos are picked up on the next build.
 - Brand card photos (`tsg1.jpeg`, `pr1.jpeg`, `pansol1.jpg`) imported in `BrandsIntro`.
 - Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
+
+## 2026-10-20 - Light theme: careers redesign and fixed nav
+- Redesigned the home Careers section as a split layout: headline, subheading "Grow with the teams behind our operations.", and "View open roles" / "Meet our brands" buttons on the left; two opposite-scrolling columns of all collage photos (shuffled on each page load, pause on hover, still under reduced motion, faded top and bottom) on the right.
+- Removed the full-bleed collage with the frosted text card, and the "Now hiring across" brand chips.
+- Home navigation is now fixed, solid white and always visible (removed scroll-collapse and hover logic); added `scroll-padding-top: 72px` so sections land below the bar.
+- Rebuilt and deployed `html/`.

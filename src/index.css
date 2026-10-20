@@ -2,6 +2,7 @@
 
 html {
   scroll-snap-type: y proximity;
+  scroll-padding-top: 72px;
 }
 
 /* Brand belt: two identical groups side by side, track slides left by one group's width. */

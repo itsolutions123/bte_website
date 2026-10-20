@@ -15,27 +15,6 @@ gsap.registerPlugin(ScrollTrigger);
 function Navigation() {
   const location = useLocation();
   const isHome = location.pathname === '/';
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (e.clientY <= 50) {
-        setIsHovered(true);
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   // For sub-pages like /careers or /connect, just show a simple back navigation
   if (!isHome) {
     return (
@@ -53,8 +32,6 @@ function Navigation() {
     );
   }
 
-  const isCollapsed = isScrolled && !isHovered;
-
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -63,10 +40,8 @@ function Navigation() {
   };
 
   return (
-    <header 
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`fixed top-0 left-0 right-0 z-50 bg-transparent flex justify-between items-center px-6 py-4 md:px-12 md:py-5 max-w-screen-2xl mx-auto w-full transition-transform duration-500 ease-in-out ${isCollapsed ? '-translate-y-full' : 'translate-y-0'}`}
+    <header
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e4e7e5] shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full"
     >
       <div className="flex items-center gap-4 nav-elem">
         <button onClick={() => scrollToSection('home')} className="flex items-center gap-4 cursor-pointer">

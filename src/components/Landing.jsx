@@ -149,55 +149,48 @@ const collageFiles = import.meta.glob('../assets/collage/*.{jpg,jpeg,png,webp}',
 const collageByName = Object.fromEntries(
   Object.entries(collageFiles).map(([path, src]) => [path.split('/').pop(), src])
 );
-const collageColumns = [
-  { dir: 'up', secs: 48, names: ['tsg2.jpg', 'pr2.jpeg', 'tsg6.jpg', 'pansol2.jpg'] },
-  { dir: 'down', secs: 56, names: ['pr3.jpeg', 'tsg3.jpg', 'tsg7.jpg', 'pr4.jpeg'] },
-  { dir: 'up', secs: 42, names: ['tsg4.jpg', 'pr5.jpeg', 'tsg8.jpg', 'pansol3.jpg'] },
-  { dir: 'down', secs: 52, names: ['pr6.jpg', 'tsg5.jpg', 'tsg9.jpg', 'tsg10.jpg'] },
+// Shuffled once per page load; every image in src/assets/collage is used, split across two columns.
+const careersNames = Object.keys(collageByName);
+for (let i = careersNames.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [careersNames[i], careersNames[j]] = [careersNames[j], careersNames[i]];
+}
+const careersCols = [
+  { dir: 'up', secs: 70, names: careersNames.filter((_, i) => i % 2 === 0) },
+  { dir: 'down', secs: 80, names: careersNames.filter((_, i) => i % 2 === 1) },
 ];
-const collageUsed = new Set(collageColumns.flatMap((c) => c.names));
-Object.keys(collageByName)
-  .filter((n) => !collageUsed.has(n))
-  .sort()
-  .forEach((n, i) => collageColumns[i % collageColumns.length].names.push(n));
 
 export function JoinCta() {
   return (
-    <section id="careers-section" className="max-w-screen-xl mx-auto w-full px-6 md:px-12 py-24 min-h-screen flex items-center snap-start">
-      <div className="collage relative w-full h-[75vh] min-h-[520px] rounded-[2.5rem] overflow-hidden bg-[#f6f5f1]">
-        <div className="absolute inset-0 flex gap-3 md:gap-4 px-3 md:px-4" aria-hidden="true">
-          {collageColumns.map((col, ci) => {
-            const tiles = col.names.map((n) => collageByName[n]).filter(Boolean);
-            return (
-              <div key={ci} className={`flex-1 min-w-0 overflow-hidden ${ci > 1 ? 'hidden md:block' : ''}`}>
-                <div
-                  className={`flex flex-col ${col.dir === 'up' ? 'collage-up' : 'collage-down'}`}
-                  style={{ animationDuration: `${col.secs}s` }}
-                >
-                  {[0, 1].map((g) => (
-                    <div key={g} className="flex flex-col gap-3 md:gap-4 pb-3 md:pb-4">
-                      {tiles.map((src, i) => (
-                        <img
-                          key={i}
-                          src={src}
-                          alt=""
-                          loading="lazy"
-                          decoding="async"
-                          className={`w-full object-cover rounded-2xl ${i % 2 === 0 ? 'aspect-square' : 'aspect-[4/5]'}`}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center px-6">
-          <div className="bg-white/90 backdrop-blur rounded-[2rem] px-8 py-10 md:px-16 md:py-14 flex flex-col items-center gap-8 text-center shadow-sm">
-            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#1f2a2e]">Find your next breakthrough</h2>
-            <Link to="/careers" className={btn}>JOIN US</Link>
+    <section id="careers-section" className="w-full min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
+      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="flex flex-col gap-7">
+          <span className="self-start rounded-full bg-[#e6f0ec] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#265a4c]">Careers at Bigtime Empire</span>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02] text-[#1f2a2e]">Find your next breakthrough</h2>
+          <p className="text-lg md:text-xl leading-relaxed text-[#55646a] max-w-xl">Grow with the teams behind our operations.</p>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/careers" className={btn}>View open roles</Link>
+            <a href="#brands-section" className="inline-block px-10 py-3.5 rounded-full border-2 border-[#2f6f5e] text-[#2f6f5e] font-semibold text-base hover:bg-[#e6f0ec] transition-colors duration-300">Meet our brands</a>
           </div>
+        </div>
+        <div
+          className="collage grid grid-cols-2 gap-4 h-[440px] md:h-[600px] overflow-hidden"
+          style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent)', maskImage: 'linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent)' }}
+          aria-hidden="true"
+        >
+          {careersCols.map((col, ci) => (
+            <div key={ci} className="min-w-0 overflow-hidden">
+              <div className={`flex flex-col ${col.dir === 'up' ? 'collage-up' : 'collage-down'}`} style={{ animationDuration: `${col.secs}s` }}>
+                {[0, 1].map((g) => (
+                  <div key={g} className="flex flex-col gap-4 pb-4">
+                    {col.names.map((n, i) => (
+                      <img key={n} src={collageByName[n]} alt="" loading="lazy" decoding="async" className={`w-full object-cover rounded-3xl ${i % 2 === 0 ? 'aspect-[4/5]' : 'aspect-square'}`} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
