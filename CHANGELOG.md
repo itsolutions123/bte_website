@@ -59,3 +59,10 @@
 - Recolored `/connect` and `/careers` to the light palette (class names only; the jobs API logic is unchanged).
 - Removed the gold glow blob and the black body background.
 - Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).
+
+## [2026-10-20] Brand belt animation and Join CTA collage
+- Brand strip (`BrandStrip` in `src/components/Landing.jsx`) is now a seamless left-scrolling marquee: two identical logo groups, 40s linear loop, edge fade mask, pauses on hover, static under `prefers-reduced-motion`. Keyframes `marquee-left` and `.marquee-track` live in `src/index.css`.
+- Join CTA (`JoinCta`) cream panel replaced by a photo collage: 4 columns scrolling in opposite directions (`collage-up` / `collage-down`, 42 to 56s), text card centered on top (`bg-white/90`, blur). Columns 3 and 4 are hidden below the `md` breakpoint. Pauses on hover, static under reduced motion.
+- All 16 photos in `src/assets/collage` are bundled via `import.meta.glob`; files not named in `collageColumns` are added round-robin, so new photos are picked up on the next build.
+- Brand card photos (`tsg1.jpeg`, `pr1.jpeg`, `pansol1.jpg`) imported in `BrandsIntro`.
+- Deploy: `npm run build`, then `cp -a dist/. html/` (no container restart).

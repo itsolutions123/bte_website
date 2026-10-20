@@ -59,10 +59,27 @@ export function LandingHero() {
 export function BrandStrip() {
   return (
     <section id="brands-section" className="bg-[#1f2a2e] w-full">
-      <div className="max-w-screen-xl mx-auto px-6 md:px-12 py-10 flex flex-wrap items-center justify-between gap-x-12 gap-y-8">
-        {brandLogos.map((b) => (
-          <img key={b.name} src={b.src} alt={b.name} className="h-20 md:h-24 w-auto object-contain" />
-        ))}
+      <div
+        className="marquee overflow-hidden py-10"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+        }}
+      >
+        <div className="marquee-track flex w-max items-center">
+          {[0, 1].map((group) => (
+            <div key={group} className="flex shrink-0 items-center" aria-hidden={group === 1 ? 'true' : undefined}>
+              {[...brandLogos, ...brandLogos, ...brandLogos].map((b, i) => (
+                <img
+                  key={b.name + i}
+                  src={b.src}
+                  alt={group === 0 ? b.name : ''}
+                  className="h-20 md:h-24 w-auto object-contain shrink-0 mx-10 md:mx-14"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -127,12 +144,61 @@ export function ValuesBand() {
   );
 }
 
+// Every image in src/assets/collage is bundled; files not listed below are added round-robin.
+const collageFiles = import.meta.glob('../assets/collage/*.{jpg,jpeg,png,webp}', { eager: true, import: 'default' });
+const collageByName = Object.fromEntries(
+  Object.entries(collageFiles).map(([path, src]) => [path.split('/').pop(), src])
+);
+const collageColumns = [
+  { dir: 'up', secs: 48, names: ['tsg2.jpg', 'pr2.jpeg', 'tsg6.jpg', 'pansol2.jpg'] },
+  { dir: 'down', secs: 56, names: ['pr3.jpeg', 'tsg3.jpg', 'tsg7.jpg', 'pr4.jpeg'] },
+  { dir: 'up', secs: 42, names: ['tsg4.jpg', 'pr5.jpeg', 'tsg8.jpg', 'pansol3.jpg'] },
+  { dir: 'down', secs: 52, names: ['pr6.jpg', 'tsg5.jpg', 'tsg9.jpg', 'tsg10.jpg'] },
+];
+const collageUsed = new Set(collageColumns.flatMap((c) => c.names));
+Object.keys(collageByName)
+  .filter((n) => !collageUsed.has(n))
+  .sort()
+  .forEach((n, i) => collageColumns[i % collageColumns.length].names.push(n));
+
 export function JoinCta() {
   return (
     <section id="careers-section" className="max-w-screen-xl mx-auto w-full px-6 md:px-12 py-24 min-h-screen flex items-center snap-start">
-      <div className="w-full bg-[#f6f5f1] rounded-[2.5rem] px-6 py-28 flex flex-col items-center gap-8 text-center">
-        <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#1f2a2e]">Find your next breakthrough</h2>
-        <Link to="/careers" className={btn}>JOIN US</Link>
+      <div className="collage relative w-full h-[75vh] min-h-[520px] rounded-[2.5rem] overflow-hidden bg-[#f6f5f1]">
+        <div className="absolute inset-0 flex gap-3 md:gap-4 px-3 md:px-4" aria-hidden="true">
+          {collageColumns.map((col, ci) => {
+            const tiles = col.names.map((n) => collageByName[n]).filter(Boolean);
+            return (
+              <div key={ci} className={`flex-1 min-w-0 overflow-hidden ${ci > 1 ? 'hidden md:block' : ''}`}>
+                <div
+                  className={`flex flex-col ${col.dir === 'up' ? 'collage-up' : 'collage-down'}`}
+                  style={{ animationDuration: `${col.secs}s` }}
+                >
+                  {[0, 1].map((g) => (
+                    <div key={g} className="flex flex-col gap-3 md:gap-4 pb-3 md:pb-4">
+                      {tiles.map((src, i) => (
+                        <img
+                          key={i}
+                          src={src}
+                          alt=""
+                          loading="lazy"
+                          decoding="async"
+                          className={`w-full object-cover rounded-2xl ${i % 2 === 0 ? 'aspect-square' : 'aspect-[4/5]'}`}
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center px-6">
+          <div className="bg-white/90 backdrop-blur rounded-[2rem] px-8 py-10 md:px-16 md:py-14 flex flex-col items-center gap-8 text-center shadow-sm">
+            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#1f2a2e]">Find your next breakthrough</h2>
+            <Link to="/careers" className={btn}>JOIN US</Link>
+          </div>
+        </div>
       </div>
     </section>
   );

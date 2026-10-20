@@ -4,6 +4,38 @@ html {
   scroll-snap-type: y proximity;
 }
 
+/* Brand belt: two identical groups side by side, track slides left by one group's width. */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-left 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* Join CTA collage: columns scroll in opposite directions, two identical groups per column. */
+@keyframes collage-up {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+@keyframes collage-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+.collage-up { animation: collage-up 50s linear infinite; }
+.collage-down { animation: collage-down 50s linear infinite; }
+.collage:hover .collage-up,
+.collage:hover .collage-down { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .collage-up, .collage-down { animation: none; }
+}
+
 body {
   margin: 0;
   background-color: #ffffff;
