@@ -33,16 +33,16 @@ const brandCards = [
   },
 ];
 
-const btn = 'inline-block px-10 py-4 rounded-full bg-[#2f6f5e] text-white font-semibold text-base hover:bg-[#265a4c] transition-colors duration-300';
+const btn = 'inline-block px-10 py-4 rounded-full bg-[#141414] text-white font-semibold text-base hover:bg-[#8a6a12] transition-colors duration-300';
 
 export function LandingHero() {
   return (
     <section className="flex-1 max-w-screen-xl mx-auto w-full px-6 md:px-12 pt-32 pb-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       <div className="flex flex-col gap-8">
-        <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.95] tracking-tight text-[#1f2a2e]">
+        <h1 className="text-5xl md:text-7xl font-black uppercase leading-[0.95] tracking-tight text-[#141414]">
           We do things differently.
         </h1>
-        <p className="text-lg md:text-xl text-[#2f6f5e] max-w-md leading-relaxed">
+        <p className="text-lg md:text-xl text-[#8a6a12] max-w-md leading-relaxed">
           Discover opportunities to grow your career with a company behind some of the Philippines&rsquo; recognizable food and restaurant brands.
         </p>
         <div>
@@ -58,7 +58,7 @@ export function LandingHero() {
 
 export function BrandStrip() {
   return (
-    <section id="brands-section" className="bg-[#1f2a2e] w-full">
+    <section id="brands-section" className="bg-[#141414] w-full">
       <div
         className="marquee overflow-hidden py-10"
         style={{
@@ -88,13 +88,13 @@ export function BrandStrip() {
 export function BrandsIntro() {
   return (
     <section id="about-section" className="max-w-screen-xl mx-auto w-full px-6 md:px-12 py-24 min-h-screen flex flex-col justify-center snap-start">
-      <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#1f2a2e] mb-14">
+      <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#141414] mb-14">
         One Company, Multiple Brands. Endless Possibilities.
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
         {brandCards.map((c) => (
           <div key={c.title} className="flex flex-col gap-4">
-            <div className="aspect-[4/3] w-full rounded-3xl bg-[#e6f0ec] overflow-hidden">
+            <div className="aspect-[4/3] w-full rounded-3xl bg-[#f8f1dc] overflow-hidden">
               <img
                 src={c.photo}
                 alt={c.title}
@@ -102,7 +102,7 @@ export function BrandsIntro() {
                 onError={(e) => { e.currentTarget.style.display = 'none'; }}
               />
             </div>
-            <h3 className="text-2xl font-bold uppercase tracking-wide text-[#1f2a2e]">{c.title}</h3>
+            <h3 className="text-2xl font-bold uppercase tracking-wide text-[#141414]">{c.title}</h3>
             <p className="text-lg text-[#55646a] leading-relaxed">{c.text}</p>
           </div>
         ))}
@@ -112,11 +112,11 @@ export function BrandsIntro() {
 }
 
 export function ValuesBand() {
-  const num = 'w-12 h-12 text-lg rounded-full bg-[#2f6f5e] text-white font-bold flex items-center justify-center';
-  const head = 'text-2xl font-bold uppercase text-[#1f2a2e]';
+  const num = 'w-12 h-12 text-lg rounded-full bg-[#141414] text-white font-bold flex items-center justify-center';
+  const head = 'text-2xl font-bold uppercase text-[#141414]';
   const body = 'text-lg text-[#3d4c52] leading-relaxed';
   return (
-    <section className="bg-[#e6f0ec] w-full">
+    <section className="bg-[#f8f1dc] w-full">
       <div className="w-full max-w-screen-xl mx-auto px-6 md:px-12 py-24 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div className="flex flex-col gap-4">
           <span className={num}>1</span>
@@ -165,12 +165,12 @@ export function JoinCta() {
     <section id="careers-section" className="w-full min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
       <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div className="flex flex-col gap-7">
-          <span className="self-start rounded-full bg-[#e6f0ec] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#265a4c]">Careers at Bigtime Empire</span>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02] text-[#1f2a2e]">Find your next breakthrough</h2>
+          <span className="self-start rounded-full bg-[#f8f1dc] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#6b520d]">Careers at Bigtime Empire</span>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02] text-[#141414]">Find your next breakthrough</h2>
           <p className="text-lg md:text-xl leading-relaxed text-[#55646a] max-w-xl">Grow with the teams behind our operations.</p>
           <div className="flex flex-wrap gap-3">
             <Link to="/careers" className={btn}>View open roles</Link>
-            <a href="#brands-section" className="inline-block px-10 py-3.5 rounded-full border-2 border-[#2f6f5e] text-[#2f6f5e] font-semibold text-base hover:bg-[#e6f0ec] transition-colors duration-300">Meet our brands</a>
+            <a href="#brands-section" className="inline-block px-10 py-3.5 rounded-full border-2 border-[#c9a227] text-[#8a6a12] font-semibold text-base hover:bg-[#f8f1dc] transition-colors duration-300">Meet our brands</a>
           </div>
         </div>
         <div
@@ -198,25 +198,25 @@ export function JoinCta() {
 }
 
 export function SiteFooter() {
-  const link = 'text-[#55646a] hover:text-[#2f6f5e] transition-colors';
-  const icon = 'w-11 h-11 rounded-full bg-[#e6f0ec] flex items-center justify-center text-[#2f6f5e] hover:bg-[#d3e6de] transition-colors';
+  const link = 'text-[#55646a] hover:text-[#8a6a12] transition-colors';
+  const icon = 'w-11 h-11 rounded-full bg-[#f8f1dc] flex items-center justify-center text-[#8a6a12] hover:bg-[#efe3bd] transition-colors';
   return (
     <footer id="community-section" className="border-t border-[#e4e7e5] w-full">
       <div className="w-full max-w-screen-xl mx-auto px-6 md:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 text-base">
         <div className="flex flex-col gap-3">
-          <strong className="text-lg uppercase text-[#1f2a2e]">Bigtime Empire Corporation</strong>
+          <strong className="text-lg uppercase text-[#141414]">Bigtime Empire Corporation</strong>
           <span className="text-[#55646a]">2F Bramante Piazza, Renaissance, Ugong, Pasig City, Philippines</span>
           <a href="mailto:admin@bigtimeempire.com" className={link}>admin@bigtimeempire.com</a>
         </div>
         <div className="flex flex-col gap-3">
-          <strong className="text-lg text-[#1f2a2e]">Links</strong>
+          <strong className="text-lg text-[#141414]">Links</strong>
           <a href="#brands-section" className={link}>The Sandwich Guy</a>
           <a href="#brands-section" className={link}>Pares Retiro</a>
           <a href="#brands-section" className={link}>Sapporo Milktea</a>
           <a href="#brands-section" className={link}>California Beach Pansol</a>
         </div>
         <div className="flex flex-col gap-3">
-          <strong className="text-lg text-[#1f2a2e]">Follow us</strong>
+          <strong className="text-lg text-[#141414]">Follow us</strong>
           <div className="flex gap-3">
             <a href="#" aria-label="Instagram" className={icon}>
               <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">

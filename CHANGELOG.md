@@ -72,3 +72,9 @@
 - Removed the full-bleed collage with the frosted text card, and the "Now hiring across" brand chips.
 - Home navigation is now fixed, solid white and always visible (removed scroll-collapse and hover logic); added `scroll-padding-top: 72px` so sections land below the bar.
 - Rebuilt and deployed `html/`.
+
+## 2026-10-20 - Gold and black accent trial, careers page redesign (branch gold-black-try)
+- Swapped the green accent for gold and black (black buttons and text, gold borders and focus, dark gold accent text, cream tints) while keeping the white light mode.
+- Redesigned the /careers job listing page: "Open roles" header with a live count, search by role, brand or location, brand buttons and Location / Job type filters, simpler job cards, and a pinned detail panel with the Apply now button at the top. The brand label no longer has a background pill.
+- /careers and /connect now use the same fixed white top bar as the home nav, with only "Back to Home" on the right.
+- Rebuilt and deployed `html/`.
