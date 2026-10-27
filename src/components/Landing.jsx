@@ -165,12 +165,10 @@ export function JoinCta() {
     <section id="careers-section" className="w-full min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
       <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <div className="flex flex-col gap-7">
-          <span className="self-start rounded-full bg-[#f8f1dc] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#6b520d]">Careers at Bigtime Empire</span>
           <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02] text-[#141414]">Find your next breakthrough</h2>
           <p className="text-lg md:text-xl leading-relaxed text-[#55646a] max-w-xl">Grow with the teams behind our operations.</p>
           <div className="flex flex-wrap gap-3">
             <Link to="/careers" className={btn}>View open roles</Link>
-            <a href="#brands-section" className="inline-block px-10 py-3.5 rounded-full border-2 border-[#c9a227] text-[#8a6a12] font-semibold text-base hover:bg-[#f8f1dc] transition-colors duration-300">Meet our brands</a>
           </div>
         </div>
         <div
