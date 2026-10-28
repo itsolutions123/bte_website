@@ -56,6 +56,19 @@ export function LandingHero() {
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('[data-hero-line]', { yPercent: 110, duration: 1.7, ease: 'back.out(1.2)', stagger: 0.22, delay: 0.25 });
+      const cs = getComputedStyle(document.documentElement);
+      const ink = cs.getPropertyValue('--color-ink').trim();
+      const gold = cs.getPropertyValue('--color-gold').trim();
+      const mix = (p) => gsap.utils.interpolate(ink, gold, p);
+      const flicker = gsap.timeline({ delay: 2.4, repeat: -1, repeatDelay: 7 });
+      flicker
+        .to('[data-flicker]', { color: mix(0.5), duration: 0.22, ease: 'sine.inOut' })
+        .to('[data-flicker]', { color: mix(0.15), duration: 0.18, ease: 'sine.inOut' })
+        .to('[data-flicker]', { color: mix(0.8), duration: 0.25, ease: 'sine.inOut' })
+        .to('[data-flicker]', { color: mix(0.3), duration: 0.2, ease: 'sine.inOut' })
+        .to('[data-flicker]', { color: gold, duration: 0.35, ease: 'sine.out' })
+        .to('[data-flicker]', { color: gold, duration: 0.5 })
+        .to('[data-flicker]', { color: ink, duration: 1, ease: 'power2.inOut' });
     });
     return () => mm.revert();
   }, { scope: headRef });
@@ -67,18 +80,14 @@ export function LandingHero() {
           <h1 ref={headRef} className="text-[length:clamp(2.75rem,10.5vw,9rem)] font-black uppercase leading-[0.9] tracking-tight text-ink">
             <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line className="block">We do</span></span>
             <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line className="block">things</span></span>
-            <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line className="block">differently.</span></span>
+            <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line data-flicker className="block">differently.</span></span>
           </h1>
-          <div aria-hidden="true" className="pointer-events-none hidden lg:block absolute top-0 right-0 w-[40%] h-[60%]">
-            <span className="absolute top-[12%] right-[28%] -rotate-6 whitespace-nowrap rounded-full bg-ink px-5 py-2 text-sm font-semibold uppercase tracking-wide text-paper">Placeholder tag A</span>
-            <span className="absolute top-[52%] right-[4%] rotate-3 whitespace-nowrap rounded-full bg-ink px-5 py-2 text-sm font-semibold uppercase tracking-wide text-paper">Placeholder tag B</span>
-          </div>
         </div>
         <p className="text-lg md:text-xl text-gold-deep max-w-md leading-relaxed">
           Discover opportunities to grow your career with a company behind some of the Philippines&rsquo; recognizable food and restaurant brands.
         </p>
         <div>
-          <Link to="/connect" className={btn}>Contact us</Link>
+          <Link to="/connect" className={btn}>Let&rsquo;s Talk!</Link>
         </div>
       </div>
     </section>
@@ -151,19 +160,19 @@ export function BrandsIntro() {
   });
   return (
     <section id="about-section" className="w-full bg-paper snap-start">
-      <div className="max-w-screen-xl mx-auto w-full px-6 md:px-12 pt-24 pb-12 min-h-screen flex flex-col justify-center">
+      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-24 md:py-32">
         <div aria-hidden="true" className="w-16 h-1.5 bg-gold mb-8 mx-auto"></div>
-        <h2 className="max-w-5xl mx-auto text-center text-4xl md:text-6xl font-black tracking-tight leading-[1.08] text-ink">
+        <h2 className="max-w-7xl mx-auto text-center text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tighter leading-[1.0] text-ink">
           We believe in the power of synergy. Through accountability, continuous improvement, and mutual growth, we build strong businesses, create sustainable jobs, and improve lives.
         </h2>
       </div>
-      <div className="w-full min-h-screen snap-start flex items-center">
+      <div className="w-full snap-start flex items-center py-16 md:py-20">
         <div className="w-full overflow-hidden motion-reduce:overflow-x-auto motion-reduce:px-6">
           <div ref={trackRef} className="flex w-max">
             {[0, 1].map((copy) => (
               <div key={copy} aria-hidden={copy === 1 ? 'true' : undefined} className={`flex shrink-0 ${copy === 1 ? 'motion-reduce:hidden' : ''}`}>
                 {Object.values(collageByName).slice(0, 6).map((src, i) => (
-                  <div key={i} className="shrink-0 w-[72vw] md:w-[34rem] pr-6">
+                  <div key={i} className="shrink-0 w-[72vw] md:w-[max(34rem,36vw)] pr-6">
                     <img
                       src={src}
                       alt=""
@@ -302,7 +311,6 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-    <div aria-hidden="true" data-wordmark className="select-none overflow-hidden whitespace-nowrap text-center font-black uppercase leading-none tracking-tight text-gold/15 text-[9vw] pb-4">Bigtime Empire</div>
     </footer>
   );
 }
