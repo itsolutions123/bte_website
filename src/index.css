@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+/* Brand palette. Use these tokens (bg-ink, text-gold-deep, border-line, ...) instead of raw hex values. */
+@theme static {
+  --color-ink: #141414;
+  --color-ink-soft: #1f2a2e;
+  --color-gold: #c9a227;
+  --color-gold-deep: #8a6a12;
+  --color-gold-darkest: #6b520d;
+  --color-cream: #f8f1dc;
+  --color-cream-deep: #efe3bd;
+  --color-paper: #f6f5f1;
+  --color-line: #e4e7e5;
+  --color-line-strong: #cfd6d3;
+  --color-line-input: #9fb0aa;
+  --color-muted: #55646a;
+  --color-muted-strong: #3d4c52;
+}
+
 html {
   scroll-snap-type: y proximity;
   scroll-padding-top: 72px;
@@ -40,7 +57,7 @@ html {
 body {
   margin: 0;
   background-color: #ffffff;
-  color: #141414;
+  color: var(--color-ink);
 }
 
 /* Job description and requirements: cleaned HTML from the admin editor.

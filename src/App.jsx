@@ -15,17 +15,27 @@ gsap.registerPlugin(ScrollTrigger);
 function Navigation() {
   const location = useLocation();
   const isHome = location.pathname === '/';
+  const headerRef = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('.nav-elem', { y: -16, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out' });
+    });
+    return () => mm.revert();
+  }, { scope: headerRef, dependencies: [isHome] });
+
   // For sub-pages like /careers or /connect, just show a simple back navigation
   if (!isHome) {
     return (
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e4e7e5] shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full">
+      <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-line shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full">
         <div className="flex items-center gap-4 nav-elem">
           <Link to="/" className="flex items-center gap-4">
             <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
-            <span className="font-bold text-xl tracking-tight hidden md:block text-[#141414]">BIGTIME EMPIRE</span>
+            <span className="font-bold text-xl tracking-tight hidden md:block text-ink">BIGTIME EMPIRE</span>
           </Link>
         </div>
-        <Link to="/" className="text-sm font-medium text-[#141414] hover:text-[#8a6a12] transition-colors duration-300 nav-elem">
+        <Link to="/" className="text-sm font-medium text-ink hover:text-gold-deep transition-colors duration-300 nav-elem">
           Back to Home
         </Link>
       </header>
@@ -41,19 +51,20 @@ function Navigation() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#e4e7e5] shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full"
+      ref={headerRef}
+      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-line shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full"
     >
       <div className="flex items-center gap-4 nav-elem">
         <button onClick={() => scrollToSection('home')} className="flex items-center gap-4 cursor-pointer">
           <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
-          <span className="font-bold text-xl tracking-tight hidden md:block text-[#141414]">BIGTIME EMPIRE</span>
+          <span className="font-bold text-xl tracking-tight hidden md:block text-ink">BIGTIME EMPIRE</span>
         </button>
       </div>
-      <nav className="flex gap-8 text-sm font-medium text-[#141414]">
-        <button onClick={() => scrollToSection('home')} className="hover:text-[#8a6a12] transition-colors duration-300 nav-elem cursor-pointer">Home</button>
-        <button onClick={() => scrollToSection('about-section')} className="hover:text-[#8a6a12] transition-colors duration-300 nav-elem cursor-pointer">About Us</button>
-        <button onClick={() => scrollToSection('careers-section')} className="hover:text-[#8a6a12] transition-colors duration-300 nav-elem cursor-pointer">Careers</button>
-        <button onClick={() => scrollToSection('community-section')} className="hover:text-[#8a6a12] transition-colors duration-300 nav-elem cursor-pointer">Community</button>
+      <nav className="flex items-center gap-1 bg-ink rounded-full px-2 py-2 text-sm font-medium nav-elem">
+        <button onClick={() => scrollToSection('home')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Home</button>
+        <button onClick={() => scrollToSection('about-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">About Us</button>
+        <button onClick={() => scrollToSection('careers-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Careers</button>
+        <button onClick={() => scrollToSection('community-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Community</button>
       </nav>
     </header>
   );
@@ -83,9 +94,6 @@ function Home() {
             Discover opportunities to grow your career with a company behind some of the Philippines' recognizable food and restaurant brands.
           </p>
         </div>
-        <Link to="/connect" className="hero-elem inline-block px-10 py-5 rounded-full bg-[#141414] text-white font-semibold text-base hover:bg-[#8a6a12] transition-colors duration-300 mt-6 lg:mt-8">
-          Contact us
-        </Link>
       </div>
       <div className="hero-logo w-full relative z-10 lg:col-span-5 flex items-center justify-center lg:justify-end">
         <img src={bteNoBg} alt="BTE Logo" className="w-full max-w-[320px] md:max-w-[480px] lg:max-w-[560px] xl:max-w-[640px] h-auto object-contain hover:scale-105 transition-all duration-700 ease-out" />
@@ -387,8 +395,81 @@ function Careers() {
 }
 
 function MainPage() {
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Targets: section ids (nav anchors) plus data- hooks set in Landing.jsx.
+
+      // Hero: plays on load.
+      gsap.from('#home h1 [data-word]', { yPercent: 115, duration: 1.1, ease: 'power4.out', stagger: 0.09, delay: 0.15 });
+      gsap.from('#home [data-hero="fade"]', { opacity: 0, y: 30, duration: 0.9, ease: 'power3.out', stagger: 0.12, delay: 0.7 });
+      gsap.from('#home [data-hero="logo"]', { opacity: 0, duration: 0.9, delay: 0.3, clearProps: 'opacity' });
+      gsap.from('#home [data-hero="logo"] img', { scale: 0.6, rotation: -12, duration: 1.3, ease: 'back.out(1.6)', delay: 0.3 });
+      gsap.to('#home [data-hero="star"]', { rotation: 360, duration: 20, ease: 'none', repeat: -1 });
+
+      // Hero: each shape moves at its own speed while scrolling.
+      const hero = { trigger: '#home', start: 'top top', end: 'bottom top', scrub: 0.6 };
+      gsap.to('#home [data-hero="circle"]', { y: 220, scale: 1.15, ease: 'none', scrollTrigger: hero });
+      gsap.to('#home [data-hero="logo"]', { y: -60, scale: 1.1, ease: 'none', scrollTrigger: hero });
+      gsap.to('#home [data-hero="ring"]', { rotation: 200, ease: 'none', scrollTrigger: hero });
+      gsap.to('#home [data-hero="dot"]', { y: 260, ease: 'none', scrollTrigger: hero });
+      gsap.to('#home [data-hero="star"]', { y: -160, ease: 'none', scrollTrigger: hero });
+
+      // Gold progress bar at the top of the page.
+      gsap.to('#scroll-progress', { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.2 } });
+
+      // Brand cards: heading words, drifting cards, zooming photos.
+      gsap.from('#about-section h2 [data-word]', { yPercent: 115, duration: 1, ease: 'power4.out', stagger: 0.06, scrollTrigger: { trigger: '#about-section h2', start: 'top 85%', once: true } });
+      gsap.utils.toArray('#about-section [data-card]').forEach((card, i) => {
+        gsap.from(card, { opacity: 0, ease: 'none', scrollTrigger: { trigger: card, start: 'top 95%', end: 'top 70%', scrub: true } });
+        gsap.fromTo(card, { y: 60 + i * 50 }, { y: -(10 + i * 30), ease: 'none', scrollTrigger: { trigger: '#about-section', start: 'top bottom', end: 'bottom top', scrub: 0.6 } });
+      });
+      gsap.utils.toArray('#about-section [data-card-img]').forEach((img) => {
+        gsap.fromTo(img, { scale: 1.3 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: img, start: 'top bottom', end: 'center center', scrub: 0.6 } });
+      });
+
+      // Values band: line draws, badges pop, text staggers up.
+      gsap.fromTo('[data-values-line]', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '[data-values]', start: 'top 90%', end: 'top 40%', scrub: 0.6 } });
+      gsap.from('[data-values] span.rounded-full', { scale: 0, rotation: -90, duration: 0.7, ease: 'back.out(2)', stagger: 0.15, scrollTrigger: { trigger: '[data-values]', start: 'top 70%', once: true } });
+      gsap.from('[data-values] h3, [data-values] ul, [data-values] p', { opacity: 0, y: 40, duration: 0.8, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: '[data-values]', start: 'top 65%', once: true } });
+
+      // Join band: circular wipe, headline words, text and button.
+      gsap.fromTo('#careers-section', { clipPath: 'circle(0% at 50% 50%)' }, { clipPath: 'circle(150% at 50% 50%)', ease: 'none', scrollTrigger: { trigger: '#careers-section', start: 'top 85%', end: 'top 15%', scrub: 0.6 } });
+      gsap.from('#careers-section h2 [data-word]', { yPercent: 115, duration: 1, ease: 'power4.out', stagger: 0.08, scrollTrigger: { trigger: '#careers-section', start: 'top 40%', once: true } });
+      gsap.from('#careers-section p, #careers-section a', { opacity: 0, y: 30, duration: 0.8, ease: 'power3.out', stagger: 0.12, scrollTrigger: { trigger: '#careers-section', start: 'top 35%', once: true } });
+
+      // Footer: columns stagger up, big wordmark slides in.
+      gsap.from('#community-section .grid > div', { opacity: 0, y: 40, duration: 0.8, ease: 'power3.out', stagger: 0.12, scrollTrigger: { trigger: '#community-section', start: 'top 85%', once: true } });
+      gsap.fromTo('[data-wordmark]', { xPercent: -25 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '#community-section', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 } });
+
+      // Scroll speed drives the belt and collage playback rate, and a slight skew on the belt.
+      const rateEls = gsap.utils.toArray('.marquee-track, .collage-up, .collage-down');
+      let vTarget = 0, vCur = 0, lastRate = 1, lastSkew = 0;
+      ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (self) => { vTarget = self.getVelocity(); } });
+      const tick = () => {
+        vTarget *= 0.92;
+        vCur += (vTarget - vCur) * 0.1;
+        const rate = 1 + Math.min(Math.abs(vCur) / 600, 5);
+        const skew = gsap.utils.clamp(-7, 7, -vCur / 300);
+        if (Math.abs(rate - lastRate) > 0.02) {
+          lastRate = rate;
+          rateEls.forEach((el) => el.getAnimations().forEach((a) => a.updatePlaybackRate?.(rate)));
+        }
+        if (Math.abs(skew - lastSkew) > 0.05) {
+          lastSkew = skew;
+          gsap.set('.marquee', { skewX: skew });
+        }
+      };
+      gsap.ticker.add(tick);
+      return () => gsap.ticker.remove(tick);
+    });
+    return () => mm.revert();
+  }, []);
+
   return (
     <>
+      <div id="scroll-progress" aria-hidden="true" className="pointer-events-none fixed top-0 left-0 right-0 h-1 bg-gold z-[60]" style={{ transform: 'scaleX(0)', transformOrigin: '0 50%' }}></div>
       <div id="home" className="min-h-screen flex flex-col snap-start">
         <LandingHero />
         <BrandStrip />
@@ -403,10 +484,6 @@ function MainPage() {
 
 function App() {
   const container = useRef();
-
-  useGSAP(() => {
-    gsap.from('.nav-elem', { y: -20, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' });
-  }, { scope: container });
 
   return (
     <Router>
