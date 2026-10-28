@@ -136,31 +136,46 @@ export function BrandStrip() {
 }
 
 export function BrandsIntro() {
+  const trackRef = useRef(null);
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const track = trackRef.current;
+      gsap.fromTo(
+        track,
+        { xPercent: 0 },
+        { xPercent: -50, duration: track.scrollWidth / 2 / 60, ease: 'none', repeat: -1 }
+      );
+    });
+    return () => mm.revert();
+  });
   return (
     <section id="about-section" className="w-full bg-paper snap-start">
-      <div className="max-w-screen-xl mx-auto w-full px-6 md:px-12 py-24 min-h-screen flex flex-col justify-center">
-        <div aria-hidden="true" className="w-16 h-1.5 bg-gold mb-6"></div>
-        <h2 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.02] text-ink mb-14">
-          <Words text="One Company, Multiple Brands. Endless Possibilities." />
+      <div className="max-w-screen-xl mx-auto w-full px-6 md:px-12 pt-24 pb-12 min-h-screen flex flex-col justify-center">
+        <div aria-hidden="true" className="w-16 h-1.5 bg-gold mb-8 mx-auto"></div>
+        <h2 className="max-w-5xl mx-auto text-center text-4xl md:text-6xl font-black tracking-tight leading-[1.08] text-ink">
+          We believe in the power of synergy. Through accountability, continuous improvement, and mutual growth, we build strong businesses, create sustainable jobs, and improve lives.
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {brandCards.map((c, i) => (
-            <div key={c.title} data-card style={{ transitionProperty: 'translate' }} className="group flex flex-col gap-4 transition-transform duration-300 hover:-translate-y-2 motion-reduce:transition-none motion-reduce:transform-none">
-              <div className="relative aspect-[4/3] w-full rounded-3xl bg-cream overflow-hidden">
-                <img
-                  src={c.photo}
-                  alt={c.title}
-                  data-card-img
-                  style={{ transitionProperty: 'scale' }}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:transform-none"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                />
-                <span aria-hidden="true" className="absolute top-4 left-4 w-10 h-10 rounded-full bg-gold text-ink font-black flex items-center justify-center">{i + 1}</span>
+      </div>
+      <div className="w-full min-h-screen snap-start flex items-center">
+        <div className="w-full overflow-hidden motion-reduce:overflow-x-auto motion-reduce:px-6">
+          <div ref={trackRef} className="flex w-max">
+            {[0, 1].map((copy) => (
+              <div key={copy} aria-hidden={copy === 1 ? 'true' : undefined} className={`flex shrink-0 ${copy === 1 ? 'motion-reduce:hidden' : ''}`}>
+                {Object.values(collageByName).slice(0, 6).map((src, i) => (
+                  <div key={i} className="shrink-0 w-[72vw] md:w-[34rem] pr-6">
+                    <img
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full aspect-square object-cover rounded-3xl bg-cream"
+                    />
+                  </div>
+                ))}
               </div>
-              <h3 className="text-2xl font-bold uppercase tracking-wide text-ink">{c.title}</h3>
-              <p className="text-lg text-muted leading-relaxed">{c.text}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
