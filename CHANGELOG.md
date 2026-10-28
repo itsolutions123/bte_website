@@ -78,3 +78,14 @@
 - Redesigned the /careers job listing page: "Open roles" header with a live count, search by role, brand or location, brand buttons and Location / Job type filters, simpler job cards, and a pinned detail panel with the Apply now button at the top. The brand label no longer has a background pill.
 - /careers and /connect now use the same fixed white top bar as the home nav, with only "Back to Home" on the right.
 - Rebuilt and deployed `html/`.
+
+## 2026-10-27/28 - Redesign restarted on the two26.studio reference (branch redesign-playful-gold)
+- Reference changed from manayerbamate to two26.studio. Shells built under the old reference are superseded and are being rebuilt in order, nav first. Palette stays black, gold and white (tokens only).
+- Hero: button label is now "Let's Talk!" (still links to /connect); gold flicker on "differently."; a black cat traced from three user videos walks in, jumps onto the headline letters, walks along the tops and falls asleep above "TLY" (lg and up only, static sleeping cat under reduced motion; new files `heroCatFrames.js` and `heroCatPlayer.js`).
+- Brand cards: statement widened with larger display type and a bigger image strip; footer giant wordmark and hero placeholder tags removed.
+- About Us: new copy ("We bring businesses together to create opportunities..."), larger headline, gold bar removed, section pinned for one viewport of scroll with a word-by-word highlight sweep (pale unread, gold-deep leading words, solid ink once passed) using ScrollTrigger from the installed gsap. Reduced motion shows the final text with no pin.
+- Not deployed: the live site still serves the Oct 27 bundle.
+
+## 2026-10-28 - Redesign: "Our brands" path section (branch redesign-playful-gold)
+- New "Our brands" section between the Values band and the Careers band, based on the two26.studio winding-line pattern: a gold line draws down the page as you scroll, with the four brands (The Sandwich Guy, Pares Retiro, Sapporo Milktea, California Beach Pansol) as stops, each logo on a soft card so it stands out on the white background. Spacing is wide enough for a short detail text beside each brand (text to come). Phones show a simple stacked list without the line. Reduced motion shows the finished line.
+- Not deployed: the live site still serves the Oct 27 bundle.

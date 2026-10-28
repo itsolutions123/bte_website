@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react';
 import bteNoBg from './assets/bte3d_nobg.png';
 import BrandsSection from './components/BrandsSection';
 import AboutSection from './components/AboutSection';
-import { LandingHero, BrandStrip, BrandsIntro, ValuesBand, JoinCta, SiteFooter } from './components/Landing';
+import { LandingHero, BrandStrip, BrandsIntro, ValuesBand, BrandsPath, JoinCta, SiteFooter } from './components/Landing';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -476,6 +476,7 @@ function MainPage() {
       </div>
       <BrandsIntro />
       <ValuesBand />
+      <BrandsPath />
       <JoinCta />
       <SiteFooter />
     </>

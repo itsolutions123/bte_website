@@ -361,6 +361,60 @@ const careersCols = [
   { dir: 'down', secs: 80, names: careersNames.filter((_, i) => i % 2 === 1) },
 ];
 
+// Path shaped for exactly four brand rows (anchors at 64%/36% of the width, 12.5/37.5/62.5/87.5% of the height).
+const BRAND_PATH = 'M500 0 C500 60 640 40 640 125 C640 250 360 250 360 375 C360 500 640 500 640 625 C640 750 360 750 360 875 C360 950 500 950 500 1000';
+
+export function BrandsPath() {
+  const pathRef = useRef(null);
+  const revealRef = useRef(null);
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.fromTo(
+        revealRef.current,
+        { attr: { height: 0 } },
+        { attr: { height: 1000 }, ease: 'none', scrollTrigger: { trigger: pathRef.current, start: 'top 65%', end: 'bottom 55%', scrub: 0.6 } }
+      );
+    });
+    return () => mm.revert();
+  });
+  return (
+    <section id="our-brands" className="w-full bg-white">
+      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-20 md:py-28">
+        <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tight leading-[0.95] text-ink">Our brands</h2>
+        <div ref={pathRef} className="relative mt-12 md:mt-16">
+          <svg aria-hidden="true" viewBox="0 0 1000 1000" preserveAspectRatio="none" className="hidden md:block absolute inset-0 w-full h-full pointer-events-none">
+            <path d={BRAND_PATH} fill="none" strokeWidth="8" strokeLinecap="round" vectorEffect="non-scaling-stroke" className="stroke-cream-deep" />
+            <defs>
+              <clipPath id="brand-path-reveal">
+                <rect ref={revealRef} x="0" y="0" width="1000" height="1000" />
+              </clipPath>
+            </defs>
+            <path data-brand-path d={BRAND_PATH} clipPath="url(#brand-path-reveal)" fill="none" strokeWidth="8" strokeLinecap="round" vectorEffect="non-scaling-stroke" className="stroke-gold" />
+          </svg>
+          {brandLogos.map((b, i) => {
+            const right = i % 2 === 0;
+            return (
+              <div key={b.name} className="relative flex md:block items-center py-5 md:py-0 md:h-[34rem]">
+                <div
+                  className={`relative z-10 flex items-center gap-5 md:gap-8 md:absolute md:top-1/2 md:-translate-y-1/2 ${right ? 'md:flex-row-reverse' : ''}`}
+                  style={right ? { right: 'calc(36% - 4rem)' } : { left: 'calc(36% - 4rem)' }}
+                >
+                  <div className={`shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-3xl ${b.name === 'California Beach Pansol' ? 'bg-ink' : 'bg-cream'} ring-1 ring-line-strong shadow-md p-3 flex items-center justify-center`}>
+                    <img src={b.src} alt={`${b.name} logo`} loading="lazy" decoding="async" className="w-full h-full object-contain rounded-2xl" />
+                  </div>
+                  <h3 className={`text-2xl md:text-3xl lg:text-5xl font-black uppercase leading-none tracking-tight text-ink max-w-[14rem] lg:max-w-[22rem] ${right ? 'md:text-right' : ''}`}>{b.name}</h3>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function JoinCta() {
   return (
     <section id="careers-section" className="w-full bg-gold min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
