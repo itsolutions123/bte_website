@@ -86,31 +86,51 @@ export function LandingHero() {
 }
 
 export function BrandStrip() {
+  const names = brandLogos.map((b) => b.name);
+  const ribbonRef = useRef(null);
+
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const tp = ribbonRef.current.querySelector('textPath');
+      const grp = ribbonRef.current.querySelector('[data-ribbon-group]');
+      let tween;
+      let cancelled = false;
+      document.fonts.ready.then(() => {
+        if (cancelled) return;
+        const len = grp.getComputedTextLength();
+        tween = gsap.fromTo(tp, { attr: { startOffset: 40 } }, { attr: { startOffset: 40 - len }, duration: 30, ease: 'none', repeat: -1 });
+      });
+      return () => {
+        cancelled = true;
+        if (tween) tween.kill();
+      };
+    });
+    return () => mm.revert();
+  }, { scope: ribbonRef });
+
   return (
-    <section id="brands-section" className="bg-ink w-full">
-      <div
-        className="marquee overflow-hidden py-10"
-        style={{
-          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-        }}
+    <section id="brands-section" className="bg-paper w-full overflow-hidden">
+      <svg
+        ref={ribbonRef}
+        viewBox="0 0 1440 360"
+        role="img"
+        aria-label={`Our brands: ${names.join(', ')}`}
+        className="block w-full min-w-[900px] h-auto"
       >
-        <div className="marquee-track flex w-max items-center">
-          {[0, 1].map((group) => (
-            <div key={group} className="flex shrink-0 items-center" aria-hidden={group === 1 ? 'true' : undefined}>
-              {[...brandLogos, ...brandLogos, ...brandLogos].map((b, i) => (
-                <div key={b.name + i} className="shrink-0 mx-8 md:mx-12 h-20 w-32 md:h-24 md:w-44 flex items-center justify-center">
-                  <img
-                    src={b.src}
-                    alt={group === 0 ? b.name : ''}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
+        <path id="brand-arc" d="M -100 260 Q 720 20 1540 260" className="fill-none stroke-ink" strokeWidth="130" />
+        <text className="fill-paper font-black" fontSize="56" dy="0.35em" letterSpacing="2">
+          <textPath href="#brand-arc" startOffset="40">
+            {[0, 1, 2].map((g) => (
+              <tspan key={g} data-ribbon-group={g === 0 ? 'true' : undefined}>
+                {names.map((n) => (
+                  <tspan key={n}>{n.toUpperCase()}<tspan className="fill-gold">{' \u2022 '}</tspan></tspan>
+                ))}
+              </tspan>
+            ))}
+          </textPath>
+        </text>
+      </svg>
     </section>
   );
 }
