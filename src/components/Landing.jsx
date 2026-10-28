@@ -2,6 +2,8 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import catFrames from './heroCatFrames.js';
+import { makeCat } from './heroCatPlayer.js';
 import bteNoBg from '../assets/bte3d_nobg.png';
 import tsgLogo from '../assets/tsg_hd.jpeg';
 import prLogo from '../assets/pr_hd.png';
@@ -51,6 +53,7 @@ const btn = 'inline-block px-10 py-4 rounded-full bg-ink text-white font-semibol
 
 export function LandingHero() {
   const headRef = useRef(null);
+  const stageRef = useRef(null);
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -70,18 +73,108 @@ export function LandingHero() {
         .to('[data-flicker]', { color: gold, duration: 0.5 })
         .to('[data-flicker]', { color: ink, duration: 1, ease: 'power2.inOut' });
     });
+    const stage = stageRef.current;
+    const h1 = headRef.current;
+    const svg = stage.querySelector('[data-cat-svg]');
+    const catPath = svg.querySelector('[data-cat-path]');
+    const lines = h1.querySelectorAll('[data-hero-line]');
+    const ctx2d = document.createElement('canvas').getContext('2d');
+    let cat = null;
+    let last = { d: '', x: NaN, y: NaN };
+    const geom = () => {
+      const wr = stage.getBoundingClientRect();
+      const cs = getComputedStyle(h1);
+      const F = parseFloat(cs.fontSize);
+      const tn = lines[2].firstChild;
+      const txt = tn.textContent.toUpperCase();
+      const ch = (i) => {
+        const r = document.createRange();
+        r.setStart(tn, i);
+        r.setEnd(tn, i + 1);
+        return r.getBoundingClientRect();
+      };
+      ctx2d.font = `${cs.fontWeight} ${F}px ${cs.fontFamily}`;
+      const m = ctx2d.measureText('D');
+      const r0 = ch(0);
+      const rL = ch(txt.indexOf('TLY') + 1);
+      return {
+        F,
+        xStart: -wr.left,
+        xD: r0.left - wr.left,
+        xL: (rL.left + rL.right) / 2 - wr.left,
+        yB: r0.top - wr.top + m.fontBoundingBoxAscent,
+        capH: m.actualBoundingBoxAscent,
+      };
+    };
+    const build = () => {
+      cat = makeCat(catFrames, geom());
+      svg.setAttribute('width', 1500 * cat.s);
+      svg.setAttribute('height', 560 * cat.s);
+      last = { d: '', x: NaN, y: NaN };
+    };
+    const draw = (p) => {
+      if (!p) return;
+      if (p.d !== last.d) { catPath.setAttribute('d', p.d); last.d = p.d; }
+      if (p.x !== last.x || p.y !== last.y) {
+        svg.style.transform = `translate(${p.x - 720 * cat.s}px, ${p.y - 520 * cat.s}px)`;
+        last.x = p.x;
+        last.y = p.y;
+      }
+    };
+    mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
+      const t0 = gsap.ticker.time + 2.4;
+      let rt;
+      const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { if (cat) build(); }, 150); };
+      const tick = () => {
+        const t = gsap.ticker.time - t0;
+        if (t < 0) return;
+        if (!cat) { build(); gsap.set(svg, { opacity: 1 }); }
+        draw(cat.poseAt(t));
+      };
+      window.addEventListener('resize', onResize);
+      gsap.ticker.add(tick);
+      return () => {
+        gsap.ticker.remove(tick);
+        window.removeEventListener('resize', onResize);
+        clearTimeout(rt);
+        cat = null;
+        gsap.set(svg, { opacity: 0 });
+      };
+    });
+    mm.add('(min-width: 1024px) and (prefers-reduced-motion: reduce)', () => {
+      let off = false;
+      const place = () => {
+        if (off) return;
+        build();
+        draw(cat.rest());
+        gsap.set(svg, { opacity: 1 });
+      };
+      (document.fonts ? document.fonts.ready : Promise.resolve()).then(place);
+      window.addEventListener('resize', place);
+      return () => {
+        off = true;
+        window.removeEventListener('resize', place);
+        cat = null;
+        gsap.set(svg, { opacity: 0 });
+      };
+    });
     return () => mm.revert();
-  }, { scope: headRef });
+  }, { scope: stageRef });
 
   return (
     <section className="relative flex-1 w-full overflow-hidden bg-paper">
       <div className="relative max-w-screen-xl mx-auto w-full px-6 md:px-12 pt-32 pb-16 flex flex-col justify-center gap-10">
-        <div className="relative">
+        <div ref={stageRef} className="relative text-[length:clamp(2.75rem,10.5vw,9rem)]">
           <h1 ref={headRef} className="text-[length:clamp(2.75rem,10.5vw,9rem)] font-black uppercase leading-[0.9] tracking-tight text-ink">
             <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line className="block">We do</span></span>
             <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line className="block">things</span></span>
             <span className="block overflow-hidden pt-[0.1em] -mt-[0.1em] pb-[0.1em] -mb-[0.1em]"><span data-hero-line data-flicker className="block">differently.</span></span>
           </h1>
+          <div aria-hidden="true" data-cat className="pointer-events-none hidden lg:block absolute left-0 top-0 h-0 w-0">
+            <svg data-cat-svg viewBox="-720 -520 1500 560" className="absolute left-0 top-0 overflow-visible text-ink opacity-0" fill="currentColor">
+              <path data-cat-path d="" />
+            </svg>
+          </div>
         </div>
         <p className="text-lg md:text-xl text-gold-deep max-w-md leading-relaxed">
           Discover opportunities to grow your career with a company behind some of the Philippines&rsquo; recognizable food and restaurant brands.
