@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import catFrames from './heroCatFrames.js';
 import { makeCat } from './heroCatPlayer.js';
 import bteNoBg from '../assets/bte3d_nobg.png';
@@ -237,11 +238,36 @@ export function BrandStrip() {
   );
 }
 
+const ABOUT_TEXT = 'We bring businesses together to create opportunities, build lasting partnerships, and deliver quality products and services that make a difference.';
+const ABOUT_WORDS = ABOUT_TEXT.split(' ');
+const ABOUT_LEAD = 3;
+const ABOUT_PALE = 'text-ink/20 transition-colors duration-200';
+const ABOUT_LIVE = 'text-gold-deep transition-colors duration-200';
+const ABOUT_DONE = 'text-ink transition-colors duration-200';
+
 export function BrandsIntro() {
   const trackRef = useRef(null);
+  const introRef = useRef(null);
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.registerPlugin(ScrollTrigger);
+      const words = gsap.utils.toArray('[data-about-word]', introRef.current);
+      const paint = (p) => {
+        const head = p * (words.length + ABOUT_LEAD);
+        words.forEach((el, i) => {
+          el.className = i < head - ABOUT_LEAD ? ABOUT_DONE : i < head ? ABOUT_LIVE : ABOUT_PALE;
+        });
+      };
+      paint(0);
+      ScrollTrigger.create({
+        trigger: introRef.current,
+        start: 'top top+=72',
+        end: '+=100%',
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => paint(self.progress),
+      });
       const track = trackRef.current;
       gsap.fromTo(
         track,
@@ -253,10 +279,11 @@ export function BrandsIntro() {
   });
   return (
     <section id="about-section" className="w-full bg-paper snap-start">
-      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-24 md:py-32">
-        <div aria-hidden="true" className="w-16 h-1.5 bg-gold mb-8 mx-auto"></div>
-        <h2 className="max-w-7xl mx-auto text-center text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tighter leading-[1.0] text-ink">
-          We believe in the power of synergy. Through accountability, continuous improvement, and mutual growth, we build strong businesses, create sustainable jobs, and improve lives.
+      <div ref={introRef} className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-16 flex flex-col justify-center min-h-[calc(100svh-72px)]">
+        <h2 className="w-full max-w-7xl mx-auto text-center text-balance text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight leading-[1.08] text-ink">
+          {ABOUT_WORDS.map((w, i) => (
+            <span key={i} data-about-word className="text-ink transition-colors duration-200">{w}{' '}</span>
+          ))}
         </h2>
       </div>
       <div className="w-full snap-start flex items-center py-16 md:py-20">
