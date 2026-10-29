@@ -99,3 +99,9 @@
 ## 2026-10-29 - Redesign: "Our brands" logo-to-card morph (branch redesign-playful-gold)
 - On screens 768px and wider, a brand with an about text now opens like this: its logo shrinks and moves to the lower-left, the logo's background grows into a large card, the about text fades in and its words highlight, then the card shrinks back into the logo and the logo returns to full size before the next brand.
 - Replaces the small card under the Sandwich Guy logo. Brands without an about text keep their logo-only hold. The list on phones and reduced motion is unchanged. Not deployed.
+
+## 2026-10-29 - Redesign: morph sync, "Meet our brands" intro, type-only Join band, hero cat blend (branch redesign-playful-gold)
+- The logo and the about card in "Our brands" now grow and shrink together as one move, in both directions, with a short still moment before and after, and the card animates smoothly without layout jumps. The about text is larger.
+- "Meet our brands" has its own screen with a letter-by-letter entrance, so it no longer overlaps the core values band. The first brand is fully visible when the stage pins.
+- The careers band is now a large type-only headline, "Your next chapter starts here.", with words filling in as you scroll, a new subheading and a larger "View open roles" button (still linking to /careers).
+- The hero cat's poses now blend into each other so its motion is smoother. Not deployed.

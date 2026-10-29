@@ -78,6 +78,14 @@ export function LandingHero() {
     const h1 = headRef.current;
     const svg = stage.querySelector('[data-cat-svg]');
     const catPath = svg.querySelector('[data-cat-path]');
+    // second layer for cross-fading between two traced frames
+    const catPath2 = svg.querySelector('[data-cat-path2]') || (() => {
+      const c = catPath.cloneNode(true);
+      c.removeAttribute('data-cat-path');
+      c.setAttribute('data-cat-path2', '');
+      catPath.after(c);
+      return c;
+    })();
     const lines = h1.querySelectorAll('[data-hero-line]');
     const ctx2d = document.createElement('canvas').getContext('2d');
     let cat = null;
@@ -115,7 +123,16 @@ export function LandingHero() {
     };
     const draw = (p) => {
       if (!p) return;
+      const d2 = p.d2 || p.d;
+      const f = p.d2 ? p.f : 0;
       if (p.d !== last.d) { catPath.setAttribute('d', p.d); last.d = p.d; }
+      if (d2 !== last.d2) { catPath2.setAttribute('d', d2); last.d2 = d2; }
+      if (f !== last.f) {
+        // both layers stay fully dark where the frames overlap, so the cat never goes see-through mid-blend
+        catPath.style.opacity = Math.min(1, 2 * (1 - f));
+        catPath2.style.opacity = Math.min(1, 2 * f);
+        last.f = f;
+      }
       if (p.x !== last.x || p.y !== last.y) {
         svg.style.transform = `translate(${p.x - 720 * cat.s}px, ${p.y - 520 * cat.s}px)`;
         last.x = p.x;
@@ -373,6 +390,8 @@ const BRAND_CARD_MORPH = 0.8; // units for each card move: logo out, background 
 const BRAND_CARD_FADE = 0.3; // units for the about text to fade in or out
 const BRAND_CARD_READ = 1.2; // units the about words take to highlight
 const BRAND_CARD_PAUSE = 0.6; // units the finished card is held before it closes
+const BRAND_CARD_LEAD = 0.5; // units the logo and name sit still, fully visible, before the morph starts
+const BRAND_CARD_TAIL = 0.4; // units the restored logo and name sit still before the camera moves on
 const BRAND_SCREENS_PER_UNIT = 0.6; // screen heights of scrolling per timeline unit
 const BRAND_CARD_W = 0.85; // card width as a share of the stage window width
 const BRAND_CARD_H = 0.82; // card height as a share of the stage window height
@@ -397,9 +416,28 @@ export function BrandsPath() {
   const winRef = useRef(null);
   const trackRef = useRef(null);
   const revealRef = useRef(null);
+  const introRef = useRef(null);
   useEffect(() => {
     if (!stage) return undefined;
     gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      const letters = gsap.utils.toArray('[data-meet-letter]', introRef.current);
+      const title = introRef.current.querySelector('[data-meet-title]');
+      gsap.set(letters, { yPercent: 125, rotate: 8, opacity: 0 });
+      gsap.set(title, { scale: 1.12 });
+      const intro = gsap.timeline({ paused: true });
+      intro.to(title, { scale: 1, duration: 1.4, ease: 'expo.out' }, 0);
+      intro.to(letters, { yPercent: 0, rotate: 0, opacity: 1, duration: 0.9, ease: 'back.out(1.7)', stagger: 0.045 }, 0);
+      ScrollTrigger.create({ trigger: introRef.current, start: 'top 70%', once: true, onEnter: () => intro.play() });
+    }, introRef);
+    return () => ctx.revert();
+  }, [stage]);
+  useEffect(() => {
+    if (!stage) return undefined;
+    gsap.registerPlugin(ScrollTrigger);
+    winRef.current.querySelectorAll('img').forEach((im) => {
+      if (im.decode) im.decode().catch(() => {});
+    });
     const ctx = gsap.context(() => {
       const win = winRef.current;
       const track = trackRef.current;
@@ -426,8 +464,8 @@ export function BrandsPath() {
         const item = row.querySelector('[data-brand-item]');
         const card = row.querySelector('[data-about-card]');
         if (i === 0) {
-          tl.fromTo(reveal, { attr: { height: 0 } }, { attr: { height: BRAND_NODE_Y[0] }, duration: 0.6, ease: 'power2.out' }, 0);
-          tl.fromTo(item, { opacity: BRAND_DIM, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'power2.out' }, 0);
+          tl.set(reveal, { attr: { height: BRAND_NODE_Y[0] } }, 0);
+          tl.set(item, { opacity: 1, scale: 1 }, 0);
         } else {
           tl.to(track, { y: () => camY(i), duration: BRAND_MOVE, ease: 'power2.inOut' }, t);
           tl.to(reveal, { attr: { height: BRAND_NODE_Y[i] }, duration: BRAND_MOVE, ease: 'power2.inOut' }, t);
@@ -459,20 +497,24 @@ export function BrandsPath() {
             };
           };
           const M = BRAND_CARD_MORPH;
-          let c = start;
-          // 1. the logo shrinks and travels to the lower-left; its cream background stays behind
-          tl.to(imgBox, { x: () => imgTo().x, y: () => imgTo().y, scale: () => imgTo().scale, duration: M, ease: 'power2.inOut' }, c);
-          tl.to(name, { opacity: 0, duration: M * 0.6 }, c);
-          c += M;
-          // 2. the logo background hands over to the card, which grows out of it
+          let c = start + BRAND_CARD_LEAD;
+          // 1+2. ONE move: the logo shrinks to the lower-left while the card grows out of its background (same start, duration and ease)
           swap(logoBg, 1, 0, c);
           swap(card, 0, 1, c);
-          tl.fromTo(
-            card,
-            { left: () => logoRect(row).left, top: () => logoRect(row).top, width: () => logoRect(row).width, height: () => logoRect(row).height },
-            { left: () => cardRect(row).left, top: () => cardRect(row).top, width: () => cardRect(row).width, height: () => cardRect(row).height, duration: M, ease: 'power2.inOut', immediateRender: false },
-            c
-          );
+          tl.to(imgBox, { x: () => imgTo().x, y: () => imgTo().y, scale: () => imgTo().scale, duration: M, ease: 'power2.inOut' }, c);
+          // the card keeps its full size; only its clip-path changes (paint only, no layout), so it runs at 60fps
+          const clipAt = () => {
+            const lr = logoRect(row);
+            const cr = cardRect(row);
+            const l = lr.left - cr.left;
+            const tp = lr.top - cr.top;
+            return 'inset(' + tp + 'px ' + (cr.width - l - lr.width) + 'px ' + (cr.height - tp - lr.height) + 'px ' + l + 'px round 24px)';
+          };
+          const CLIP_OPEN = 'inset(-48px -48px -48px -48px round 24px)';
+          tl.set(card, { left: () => cardRect(row).left, top: () => cardRect(row).top, width: () => cardRect(row).width, height: () => cardRect(row).height, clipPath: clipAt }, 0);
+          tl.set(imgBox, { willChange: 'transform' }, 0);
+          tl.fromTo(card, { clipPath: clipAt }, { clipPath: CLIP_OPEN, duration: M, ease: 'power2.inOut', immediateRender: false }, c);
+          tl.to(name, { opacity: 0, duration: M * 0.25 }, c);
           c += M;
           // 3. the about text fades in, its words highlight, then the finished card is held
           tl.fromTo(cardText, { opacity: 0 }, { opacity: 1, duration: BRAND_CARD_FADE, immediateRender: false }, c);
@@ -482,13 +524,13 @@ export function BrandsPath() {
           // 4. text out, the card shrinks back into the logo background, the logo and the name return
           tl.to(cardText, { opacity: 0, duration: BRAND_CARD_FADE }, c);
           c += BRAND_CARD_FADE;
-          tl.to(card, { left: () => logoRect(row).left, top: () => logoRect(row).top, width: () => logoRect(row).width, height: () => logoRect(row).height, duration: M, ease: 'power2.inOut' }, c);
-          c += M;
-          swap(card, 1, 0, c);
-          swap(logoBg, 0, 1, c);
+          // the card shrinks into the logo background while the logo grows back out of the corner: one move, mirror of the opening
+          tl.to(card, { clipPath: clipAt, duration: M, ease: 'power2.inOut' }, c);
           tl.to(imgBox, { x: 0, y: 0, scale: 1, duration: M, ease: 'power2.inOut' }, c);
-          tl.to(name, { opacity: 1, duration: M * 0.6 }, c + M * 0.4);
-          c += M;
+          tl.to(name, { opacity: 1, duration: M * 0.3 }, c + M * 0.7);
+          swap(card, 1, 0, c + M);
+          swap(logoBg, 0, 1, c + M);
+          c += M + BRAND_CARD_TAIL;
           t = c;
         } else {
           t += BRAND_HOLD;
@@ -521,7 +563,7 @@ export function BrandsPath() {
     return (
       <section id="our-brands" className="w-full bg-white">
         <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 py-20 md:py-28">
-          <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tight leading-[0.95] text-ink text-center">Our brands</h2>
+          <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tight leading-[0.95] text-ink text-center">Meet our brands</h2>
           <ul className="mt-12 md:mt-16 flex flex-col gap-12 max-w-xl mx-auto">
             {brandLogos.map((b) => (
               <li key={b.name}>
@@ -544,8 +586,18 @@ export function BrandsPath() {
 
   return (
     <section id="our-brands" className="w-full bg-white">
+      <div ref={introRef} className="w-full min-h-[calc(100svh-72px)] flex flex-col items-center justify-center px-6 text-center overflow-hidden">
+        <h2 data-meet-title aria-label="Meet our brands" className="flex flex-wrap justify-center gap-x-[0.3em] text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tight leading-[1.05] text-ink">
+          {['Meet', 'our', 'brands'].map((w, wi) => (
+            <span key={w} aria-hidden="true" className="inline-block overflow-hidden pb-[0.08em]">
+              {w.split('').map((ch, ci) => (
+                <span key={ci} data-meet-letter className={`inline-block ${wi === 0 ? 'text-gold-deep' : ''}`}>{ch}</span>
+              ))}
+            </span>
+          ))}
+        </h2>
+      </div>
       <div ref={stageRef} className="w-full h-[calc(100svh-72px)] flex flex-col">
-        <h2 className="shrink-0 pt-6 pb-2 text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[0.95] text-ink text-center">Our brands</h2>
         <div ref={winRef} className="relative flex-1 min-h-0 w-full overflow-hidden">
           <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12">
             <div ref={trackRef} className="relative">
@@ -576,8 +628,8 @@ export function BrandsPath() {
                     </div>
                     {b.description && (
                       <div data-about-card className="absolute z-[5] overflow-hidden rounded-3xl bg-cream ring-1 ring-line-strong shadow-xl opacity-0 pointer-events-none">
-                        <div data-about-text className="absolute inset-0 flex items-center justify-center px-10 py-12 opacity-0">
-                          <p className="max-w-3xl text-center text-lg lg:text-xl xl:text-2xl leading-relaxed">
+                        <div data-about-text className="absolute inset-0 flex items-center justify-center px-12 pt-10 pb-28 opacity-0">
+                          <p className="max-w-5xl text-center text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl leading-snug font-medium">
                             {b.description.split(' ').map((w, wi, arr) => (
                               <span key={wi} data-about-word className="text-ink transition-colors duration-200">{w}{wi < arr.length - 1 ? ' ' : ''}</span>
                             ))}
@@ -696,35 +748,59 @@ function BrandsPathOld() {
   );
 }
 
+const JOIN_WORDS = ['Your', 'next', 'chapter', 'starts', 'here.'];
+const JOIN_PALE = 'text-ink/25 transition-colors duration-200';
+const JOIN_LIVE = 'text-cream transition-colors duration-200';
+const JOIN_DONE = 'text-ink transition-colors duration-200';
+const JOIN_LEAD = 1;
+
 export function JoinCta() {
+  const rootRef = useRef(null);
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const words = gsap.utils.toArray('[data-join-word]', rootRef.current);
+    const paint = (p) => {
+      const head = p * (words.length + JOIN_LEAD);
+      words.forEach((el, i) => {
+        el.className = i < head - JOIN_LEAD ? JOIN_DONE : i < head ? JOIN_LIVE : JOIN_PALE;
+      });
+    };
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      paint(0);
+      const st = ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: 'top 60%',
+        end: 'top 5%',
+        onUpdate: (self) => paint(self.progress),
+        onRefresh: (self) => paint(self.progress),
+      });
+      return () => st.kill();
+    });
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      paint(1);
+    });
+    return () => mm.revert();
+  }, []);
   return (
-    <section id="careers-section" className="w-full bg-gold min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
-      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div className="flex flex-col gap-7">
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.02] text-ink"><Words text="Find your next breakthrough" /></h2>
-          <p className="text-lg md:text-xl leading-relaxed text-ink/80 max-w-xl">Grow with the teams behind our operations.</p>
-          <div className="flex flex-wrap gap-3">
-            <Link to="/careers" className={btn}>View open roles</Link>
-          </div>
-        </div>
-        <div
-          className="collage grid grid-cols-2 gap-4 h-[440px] md:h-[600px] overflow-hidden"
-          style={{ WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent)', maskImage: 'linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent)' }}
-          aria-hidden="true"
-        >
-          {careersCols.map((col, ci) => (
-            <div key={ci} className="min-w-0 overflow-hidden">
-              <div className={`flex flex-col ${col.dir === 'up' ? 'collage-up' : 'collage-down'}`} style={{ animationDuration: `${col.secs}s` }}>
-                {[0, 1].map((g) => (
-                  <div key={g} className="flex flex-col gap-4 pb-4">
-                    {col.names.map((n, i) => (
-                      <img key={n} src={collageByName[n]} alt="" loading="lazy" decoding="async" className={`w-full object-cover rounded-3xl ${i % 2 === 0 ? 'aspect-[4/5]' : 'aspect-square'}`} />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+    <section ref={rootRef} id="careers-section" className="w-full bg-gold min-h-screen snap-start flex items-center pt-28 pb-16 lg:pt-24 lg:pb-12">
+      <div className="max-w-screen-2xl mx-auto w-full px-6 md:px-12 flex flex-col gap-10 md:gap-12">
+        <h2 aria-label="Your next chapter starts here." className="flex flex-wrap gap-x-[0.25em] text-[length:clamp(2.25rem,7.6vw,7.5rem)] font-black uppercase leading-[0.95] tracking-tight">
+          {JOIN_WORDS.flatMap((w, i) => {
+            const el = <span key={w} aria-hidden="true" data-join-word className={JOIN_DONE}>{w}</span>;
+            return i === 2 ? [el, <span key="line-break" aria-hidden="true" className="hidden md:block basis-full h-0" />] : [el];
+          })}
+        </h2>
+        <p className="text-lg md:text-2xl leading-relaxed text-ink/80 max-w-2xl">
+          Explore opportunities across our brands<br className="hidden md:block" /> and find where you can grow.
+        </p>
+        <div>
+          <Link to="/careers" className="group inline-flex w-full sm:w-auto items-center justify-center gap-3 rounded-full bg-ink px-9 py-5 text-lg md:text-xl font-bold text-white shadow-lg transition-colors duration-300 hover:bg-cream hover:text-ink focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-ink">
+            View open roles
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5">
+              <path d="M3 10h13M11 5l5 5-5 5" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>
