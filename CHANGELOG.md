@@ -95,3 +95,6 @@
 - The Sandwich Guy detail card now sits below its logo and its words highlight while the brand is held.
 - Phones and reduced-motion users get a stacked list with no path and no pin.
 - Replaces the free-scrolling rows from 2026-10-28. `BrandsPathOld` stays in `Landing.jsx` as dead code pending confirmation. Not deployed.
+\n\n## 2026-10-29 - Redesign: "Our brands" logo-to-card morph (branch redesign-playful-gold)
+- On screens 768px and wider, a brand with an about text now opens like this: its logo shrinks and moves to the lower-left, the logo's background grows into a large card, the about text fades in and its words highlight, then the card shrinks back into the logo and the logo returns to full size before the next brand.
+- Replaces the small card under the Sandwich Guy logo. Brands without an about text keep their logo-only hold. The list on phones and reduced motion is unchanged. Not deployed.

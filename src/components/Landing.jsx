@@ -369,9 +369,15 @@ const BRAND_NODE_Y = [125, 375, 625, 875]; // y of each brand's node in BRAND_PA
 const BRAND_DIM = 0.25; // opacity of a brand that is not the centred one
 const BRAND_MOVE = 1; // timeline units to travel between two brands
 const BRAND_HOLD = 1.2; // units a plain brand holds still
-const BRAND_HOLD_CARD = 2.6; // units the brand with a detail card holds (card in, words read, pause)
+const BRAND_CARD_MORPH = 0.8; // units for each card move: logo out, background grows, card shrinks, logo back
+const BRAND_CARD_FADE = 0.3; // units for the about text to fade in or out
+const BRAND_CARD_READ = 1.2; // units the about words take to highlight
+const BRAND_CARD_PAUSE = 0.6; // units the finished card is held before it closes
 const BRAND_SCREENS_PER_UNIT = 0.6; // screen heights of scrolling per timeline unit
-const BRAND_CARD_GAP = 24; // px between logo and card, matches mt-6
+const BRAND_CARD_W = 0.85; // card width as a share of the stage window width
+const BRAND_CARD_H = 0.82; // card height as a share of the stage window height
+const BRAND_LOGO_SMALL = 96; // px size of the logo once it sits in the card's lower-left corner
+const BRAND_CARD_INSET = 32; // px between the card edge and the shrunken logo
 
 function useBrandStage() {
   const [on, setOn] = useState(() => typeof window !== 'undefined' && window.matchMedia(BRAND_STAGE_QUERY).matches);
@@ -399,10 +405,17 @@ export function BrandsPath() {
       const track = trackRef.current;
       const reveal = revealRef.current;
       const rows = gsap.utils.toArray('[data-brand-row]', track);
-      const focusY = (i) => {
-        const row = rows[i];
-        const card = row.querySelector('[data-about-card]');
-        return row.offsetTop + row.offsetHeight / 2 + (card ? (card.offsetHeight + BRAND_CARD_GAP) / 2 : 0);
+      const focusY = (i) => rows[i].offsetTop + rows[i].offsetHeight / 2;
+      // Rects are in row coordinates and offset based, so camera moves and scales do not change them.
+      const logoRect = (row) => {
+        const item = row.querySelector('[data-brand-item]');
+        const logo = row.querySelector('[data-brand-logo]');
+        return { left: item.offsetLeft + logo.offsetLeft, top: item.offsetTop + logo.offsetTop, width: logo.offsetWidth, height: logo.offsetHeight };
+      };
+      const cardRect = (row) => {
+        const width = Math.min(row.clientWidth, win.clientWidth * BRAND_CARD_W);
+        const height = win.clientHeight * BRAND_CARD_H;
+        return { left: (row.clientWidth - width) / 2, top: (row.offsetHeight - height) / 2, width, height };
       };
       const camY = (i) => win.clientHeight / 2 - focusY(i);
       const tl = gsap.timeline({ defaults: { ease: 'none' } });
@@ -423,6 +436,10 @@ export function BrandsPath() {
         }
         const start = t;
         if (card) {
+          const cardText = card.querySelector('[data-about-text]');
+          const imgBox = row.querySelector('[data-brand-logo-img]');
+          const logoBg = row.querySelector('[data-brand-logo-bg]');
+          const name = row.querySelector('[data-brand-name]');
           const words = gsap.utils.toArray('[data-about-word]', card);
           const paint = (p) => {
             const head = p * (words.length + ABOUT_LEAD);
@@ -431,14 +448,54 @@ export function BrandsPath() {
             });
           };
           paint(0);
-          tl.fromTo(card, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: 'power2.out' }, start + 0.3);
-          tl.to({}, { duration: 1.2, onUpdate: function () { paint(this.progress()); } }, start + 0.8);
+          const swap = (el, from, to, at) => tl.fromTo(el, { opacity: from }, { opacity: to, duration: 0.001, immediateRender: false }, at);
+          const imgTo = () => {
+            const lr = logoRect(row);
+            const cr = cardRect(row);
+            return {
+              x: cr.left + BRAND_CARD_INSET + BRAND_LOGO_SMALL / 2 - (lr.left + lr.width / 2),
+              y: cr.top + cr.height - BRAND_CARD_INSET - BRAND_LOGO_SMALL / 2 - (lr.top + lr.height / 2),
+              scale: BRAND_LOGO_SMALL / lr.width,
+            };
+          };
+          const M = BRAND_CARD_MORPH;
+          let c = start;
+          // 1. the logo shrinks and travels to the lower-left; its cream background stays behind
+          tl.to(imgBox, { x: () => imgTo().x, y: () => imgTo().y, scale: () => imgTo().scale, duration: M, ease: 'power2.inOut' }, c);
+          tl.to(name, { opacity: 0, duration: M * 0.6 }, c);
+          c += M;
+          // 2. the logo background hands over to the card, which grows out of it
+          swap(logoBg, 1, 0, c);
+          swap(card, 0, 1, c);
+          tl.fromTo(
+            card,
+            { left: () => logoRect(row).left, top: () => logoRect(row).top, width: () => logoRect(row).width, height: () => logoRect(row).height },
+            { left: () => cardRect(row).left, top: () => cardRect(row).top, width: () => cardRect(row).width, height: () => cardRect(row).height, duration: M, ease: 'power2.inOut', immediateRender: false },
+            c
+          );
+          c += M;
+          // 3. the about text fades in, its words highlight, then the finished card is held
+          tl.fromTo(cardText, { opacity: 0 }, { opacity: 1, duration: BRAND_CARD_FADE, immediateRender: false }, c);
+          c += BRAND_CARD_FADE;
+          tl.to({}, { duration: BRAND_CARD_READ, onUpdate: function () { paint(this.progress()); } }, c);
+          c += BRAND_CARD_READ + BRAND_CARD_PAUSE;
+          // 4. text out, the card shrinks back into the logo background, the logo and the name return
+          tl.to(cardText, { opacity: 0, duration: BRAND_CARD_FADE }, c);
+          c += BRAND_CARD_FADE;
+          tl.to(card, { left: () => logoRect(row).left, top: () => logoRect(row).top, width: () => logoRect(row).width, height: () => logoRect(row).height, duration: M, ease: 'power2.inOut' }, c);
+          c += M;
+          swap(card, 1, 0, c);
+          swap(logoBg, 0, 1, c);
+          tl.to(imgBox, { x: 0, y: 0, scale: 1, duration: M, ease: 'power2.inOut' }, c);
+          tl.to(name, { opacity: 1, duration: M * 0.6 }, c + M * 0.4);
+          c += M;
+          t = c;
+        } else {
+          t += BRAND_HOLD;
         }
-        t += card ? BRAND_HOLD_CARD : BRAND_HOLD;
         holds.push([start, t]);
         if (i < rows.length - 1) {
           tl.to(item, { opacity: BRAND_DIM, scale: 0.9, duration: BRAND_MOVE * 0.5, ease: 'power2.in' }, t);
-          if (card) tl.to(card, { opacity: 0, scale: 0.6, duration: BRAND_MOVE * 0.5, ease: 'power2.in' }, t);
         }
       });
       tl.to(reveal, { attr: { height: 1000 }, duration: 0.8, ease: 'power2.inOut' }, t - 0.8);
@@ -509,22 +566,25 @@ export function BrandsPath() {
                       data-brand-item
                       className={`absolute inset-y-0 my-auto h-fit z-10 flex items-center gap-8 [--half:7rem] lg:[--half:8rem] ${right ? 'flex-row-reverse right-[calc(36%_-_var(--half))]' : 'left-[calc(36%_-_var(--half))]'}`}
                     >
-                      <div data-brand-logo className={`relative shrink-0 w-56 h-56 lg:w-64 lg:h-64 rounded-3xl ${b.name === 'California Beach Pansol' ? 'bg-ink' : 'bg-cream'} ring-1 ring-line-strong shadow-md p-3 flex items-center justify-center`}>
-                        <img src={b.src} alt={`${b.name} logo`} decoding="async" className="w-full h-full object-contain rounded-2xl" />
-                        {b.description && (
-                          <div className="absolute top-full left-1/2 mt-6 w-[26rem] -ml-[13rem] xl:w-[34rem] xl:-ml-[17rem]">
-                            <div data-about-card className="rounded-3xl bg-cream ring-1 ring-line-strong shadow-xl p-6 xl:p-10">
-                              <p className="text-sm lg:text-base xl:text-lg leading-relaxed">
-                                {b.description.split(' ').map((w, wi, arr) => (
-                                  <span key={wi} data-about-word className="text-ink transition-colors duration-200">{w}{wi < arr.length - 1 ? ' ' : ''}</span>
-                                ))}
-                              </p>
-                            </div>
-                          </div>
-                        )}
+                      <div data-brand-logo className={`relative shrink-0 w-56 h-56 lg:w-64 lg:h-64 flex items-center justify-center`}>
+                        <div data-brand-logo-bg className={`absolute inset-0 rounded-3xl ${b.name === 'California Beach Pansol' ? 'bg-ink' : 'bg-cream'} ring-1 ring-line-strong shadow-md`}></div>
+                        <div data-brand-logo-img className="relative w-full h-full p-3">
+                          <img src={b.src} alt={`${b.name} logo`} decoding="async" className="w-full h-full object-contain rounded-2xl" />
+                        </div>
                       </div>
-                      <h3 className={`text-4xl lg:text-6xl font-black uppercase leading-none tracking-tight text-ink max-w-[14rem] lg:max-w-[26rem] ${right ? 'text-right' : ''}`}>{b.name}</h3>
+                      <h3 data-brand-name className={`text-4xl lg:text-6xl font-black uppercase leading-none tracking-tight text-ink max-w-[14rem] lg:max-w-[26rem] ${right ? 'text-right' : ''}`}>{b.name}</h3>
                     </div>
+                    {b.description && (
+                      <div data-about-card className="absolute z-[5] overflow-hidden rounded-3xl bg-cream ring-1 ring-line-strong shadow-xl opacity-0 pointer-events-none">
+                        <div data-about-text className="absolute inset-0 flex items-center justify-center px-10 py-12 opacity-0">
+                          <p className="max-w-3xl text-center text-lg lg:text-xl xl:text-2xl leading-relaxed">
+                            {b.description.split(' ').map((w, wi, arr) => (
+                              <span key={wi} data-about-word className="text-ink transition-colors duration-200">{w}{wi < arr.length - 1 ? ' ' : ''}</span>
+                            ))}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
