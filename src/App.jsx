@@ -63,8 +63,8 @@ function Navigation() {
       <nav className="flex items-center gap-1 bg-ink rounded-full px-2 py-2 text-sm font-medium nav-elem">
         <button onClick={() => scrollToSection('home')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Home</button>
         <button onClick={() => scrollToSection('about-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">About Us</button>
+        <button onClick={() => scrollToSection('our-brands')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Brands</button>
         <button onClick={() => scrollToSection('careers-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Careers</button>
-        <button onClick={() => scrollToSection('community-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Community</button>
       </nav>
     </header>
   );

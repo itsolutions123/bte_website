@@ -110,3 +110,8 @@
 - Hero cat speed: R 2 to 3, CFG walk1 0.6 to 0.9, walk2 0.9 to 1.35, cycle 0.3 to 0.2 in heroCatPlayer.js.
 - Deployed to html/ after backup ~/backups/bte-website-html-cat-speed-2026-10-29. Live now includes the morph, the Meet our brands intro, the type-only Join band and the cat cross-fade.
 - Cat smoothness fix not made yet (see PROJECT_STATE.md).
+
+## 2026-10-29 - Landing nav: Home, About Us, Brands, Careers
+- Nav: Community button removed, Brands button added (scrolls to the Meet our brands intro, id our-brands). Home, About Us and Careers keep their targets.
+- Deployed to html/ after backup ~/backups/bte-website-html-nav-brands-2026-10-29.
+- 768px and 375px not checked yet; cat smoothness fix not made yet (see PROJECT_STATE.md).
