@@ -1,9 +1,9 @@
 // Pure sequence logic for the hero cat. Inputs are page-space pixels; no DOM access.
 // Anchor = the cat's nose at ground level. Frame paths are in "native" units (video px).
 const K = 0.0023;        // em per native unit (cat is about 0.6em tall)
-const R = 2;             // jump/sleep video playback speed
+const R = 3;             // jump/sleep video playback speed
 const VFPS = 24;
-const CFG = { walk1: 0.6, walk2: 0.9, cycle: 0.3, sink: 0.012, breath: 0.9 };
+const CFG = { walk1: 0.9, walk2: 1.35, cycle: 0.2, sink: 0.012, breath: 0.9 };
 const BPP = [0, 1, 2, 3, 2, 1];
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 function lastLE(arr, v) { let k = 0; for (let i = 0; i < arr.length; i++) if (arr[i] <= v) k = i; return k; }

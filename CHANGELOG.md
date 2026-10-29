@@ -105,3 +105,8 @@
 - "Meet our brands" has its own screen with a letter-by-letter entrance, so it no longer overlaps the core values band. The first brand is fully visible when the stage pins.
 - The careers band is now a large type-only headline, "Your next chapter starts here.", with words filling in as you scroll, a new subheading and a larger "View open roles" button (still linking to /careers).
 - The hero cat's poses now blend into each other so its motion is smoother. Not deployed.
+
+## 2026-10-29 - Hero cat 1.5x faster; redesign work deployed to 8086
+- Hero cat speed: R 2 to 3, CFG walk1 0.6 to 0.9, walk2 0.9 to 1.35, cycle 0.3 to 0.2 in heroCatPlayer.js.
+- Deployed to html/ after backup ~/backups/bte-website-html-cat-speed-2026-10-29. Live now includes the morph, the Meet our brands intro, the type-only Join band and the cat cross-fade.
+- Cat smoothness fix not made yet (see PROJECT_STATE.md).
