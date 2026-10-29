@@ -89,3 +89,9 @@
 ## 2026-10-28 - Redesign: "Our brands" path section (branch redesign-playful-gold)
 - New "Our brands" section between the Values band and the Careers band, based on the two26.studio winding-line pattern: a gold line draws down the page as you scroll, with the four brands (The Sandwich Guy, Pares Retiro, Sapporo Milktea, California Beach Pansol) as stops, each logo on a soft card so it stands out on the white background. Spacing is wide enough for a short detail text beside each brand (text to come). Phones show a simple stacked list without the line. Reduced motion shows the finished line.
 - Not deployed: the live site still serves the Oct 27 bundle.
+
+## 2026-10-29 - Redesign: "Our brands" rebuilt as a pinned, snapping stage (branch redesign-playful-gold)
+- "Our brands" now pins under the nav on screens 768px and wider. One scrubbed timeline moves a camera-style track so each of the four brands is centred in turn, with a hold per brand, a snap to each hold, and the gold path advancing to each brand's node. Each brand fades and scales in on arrival.
+- The Sandwich Guy detail card now sits below its logo and its words highlight while the brand is held.
+- Phones and reduced-motion users get a stacked list with no path and no pin.
+- Replaces the free-scrolling rows from 2026-10-28. `BrandsPathOld` stays in `Landing.jsx` as dead code pending confirmation. Not deployed.

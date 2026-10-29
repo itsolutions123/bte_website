@@ -1,6 +1,7 @@
 # Project State
 
 ## Current Status
+> STALE: this block describes the older gold-black-try era. For the current redesign (branch `redesign-playful-gold`, two26.studio reference) read the dated entries from 2026-10-27/28 onward, at the end of this file.
 - **Frontend Design:** White light mode with a gold and black accent (branch `gold-black-try`, branched from `light-theme`; `light-theme` keeps the green version; neither is merged to main). Palette: white ground, black #141414, gold #c9a227, dark gold #8a6a12 (accent text and hover), cream #f8f1dc (tint; #efe3bd on hover; #6b520d pill text), grays #55646a / #3d4c52 / #e4e7e5 / #cfd6d3 / #f6f5f1. Layout and details: see the 2026-10-20 sections below. The dark-mode notes further down this file are historical.
 - **Routing:** Client-side routing implemented via React Router for clean URLs (/home, /jobs, /community).
 - **Animations:** GSAP timeline integrated for component entrance styling.
@@ -96,3 +97,15 @@
 - Motion: the gold path is revealed by a clip rectangle (`#brand-path-reveal`) whose height is scrubbed 0 to 1000 with ScrollTrigger (from the installed gsap, no new dependency), start `top 65%`, end `bottom 55%`, scrub 0.6. A clip reveal was used instead of `strokeDashoffset` because the path is stretched with `preserveAspectRatio="none"` and a non-scaling stroke, where dash lengths do not scale reliably. Under prefers-reduced-motion the full path shows with no scrub.
 - Hardcodes (flagged): `BRAND_PATH` and the row geometry are shaped for exactly four brands; the `'California Beach Pansol'` name check for the dark card; the heading text. Tokens only, no raw hex.
 - NOT deployed. Not yet checked by the user at 768 and 375 widths (H8). Open: the brand detail texts (copy needed from the user); phone and tablet checks; then rebuild the Join/careers band and the footer in the two26 style; the stale items listed in the previous entry still stand.
+
+## 2026-10-29 - Redesign: "Our brands" rebuilt as a pinned, snapping stage (branch redesign-playful-gold)
+- **Why:** a screen recording of the free-scrolling version showed the four brands passing in roughly 4 to 5 seconds, with no dwell. Only The Sandwich Guy animated, its card text was still mostly pale when centred, two rows were visible at once, and its logo sat off the path while the other three sat on it. The user asked for more space, per-brand spacing and slower scroll pacing, then approved the pinned rebuild.
+- **Now (768px and up, motion allowed):** `BrandsPath` in `src/components/Landing.jsx` pins under the nav (`top top+=72`). One scrubbed GSAP timeline (scrub 0.5) slides the brand track like a camera so each brand is centred in turn. The gold path reveal advances to each brand's node. Each brand fades and scales in on arrival and dims on leaving. The Sandwich Guy detail card sits below its logo, its words highlight, then it holds before leaving. Scroll snaps to each brand's hold. Below 768px, or with reduced motion, a stacked list with no path and no pin is shown.
+- **Constants (named at the top of the block):** BRAND_NODE_Y, BRAND_DIM 0.25, BRAND_MOVE 1, BRAND_HOLD 1.2, BRAND_HOLD_CARD 2.6, BRAND_SCREENS_PER_UNIT 0.6, BRAND_CARD_GAP 24. Rows are 40rem at md and 46rem at lg; logos 14rem at md and 16rem at lg.
+- **H15 judgment calls (user can override):** card below the logo instead of beside it, arrow icon removed, uniform logo and label sizes, dimmed opacity 0.25, `useEffect` with `gsap.context` instead of `useGSAP` (installed `@gsap/react` version not checked).
+- **Departure from H10:** `loading="lazy"` removed on the stage logos (the overflow clip would load them late); the stacked list keeps it.
+- **Not verified by Claude (H7):** the render at any width. The user saw the desktop version live and approved it. Not checked: 768px and 375px (H8), and whether the soft scroll-snap in `index.css` fights the pin.
+- **Dead code:** `BrandsPathOld` is left in `Landing.jsx` until the user confirms its deletion by name (H11).
+- **Hardcodes:** `'California Beach Pansol'` name check for the dark logo card; the rem sizes above.
+- **Nothing deployed.** No html/ backup was made (H6). Strays are not part of this commit: `M html/index.html`, `?? html/assets/index-CKEsOZPB.js`, `?? html/assets/index-bclOUt3g.css`, `?? bte-floating-decor.patch`, `?? src/components/catWalk.js`.
+- **Open:** detail lines for the other three brands (user to supply, not invented); 768px and 375px passes; the lead-in and exit around JoinCta; the Join band, footer, /careers and /connect rebuilds in H4 order; the per-file H11 confirmations.
