@@ -115,3 +115,11 @@
 - Nav: Community button removed, Brands button added (scrolls to the Meet our brands intro, id our-brands). Home, About Us and Careers keep their targets.
 - Deployed to html/ after backup ~/backups/bte-website-html-nav-brands-2026-10-29.
 - 768px and 375px not checked yet; cat smoothness fix not made yet (see PROJECT_STATE.md).
+
+
+## [2026-11-14] Feature: new home page design (Home.dc.html) ported
+- Added src/newhome.css and src/components/NewHome.jsx; MainPage now renders NewHome (old version kept as unused MainPageOld).
+- New nav: About, Brands, Why work with us, Contact (/connect), gold Careers pill; new ids why-section and about-section moved to Who we are.
+- All View open roles buttons still go to /careers; jobs API and Apply link untouched.
+- Fixed: App wrapper overflow-x-hidden changed to overflow-x-clip (it blanked the pinned brand showcase); hero ring no longer flashes before its burst.
+- Not deployed. Mobile pass, scroll-padding-top 76px and old-code removal still open.

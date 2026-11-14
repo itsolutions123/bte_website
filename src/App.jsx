@@ -7,6 +7,7 @@ import bteNoBg from './assets/bte3d_nobg.png';
 import BrandsSection from './components/BrandsSection';
 import AboutSection from './components/AboutSection';
 import { LandingHero, BrandStrip, BrandsIntro, ValuesBand, BrandsPath, JoinCta, SiteFooter } from './components/Landing';
+import NewHome from './components/NewHome';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -49,23 +50,25 @@ function Navigation() {
     }
   };
 
+  const navLink = 'max-[900px]:hidden cursor-pointer text-[15px] font-medium text-white transition-colors duration-300 hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold';
+
   return (
     <header
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-line shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full"
+      className="fixed top-0 left-0 right-0 z-50 h-[76px] w-full border-b border-gold/35 bg-ink/80 text-white backdrop-blur-xl"
     >
-      <div className="flex items-center gap-4 nav-elem">
-        <button onClick={() => scrollToSection('home')} className="flex items-center gap-4 cursor-pointer">
-          <img src="/newbte.png" alt="BTE Logo" className="h-8 w-auto object-contain" />
-          <span className="font-bold text-xl tracking-tight hidden md:block text-ink">BIGTIME EMPIRE</span>
+      <div className="mx-auto flex h-full w-full max-w-[1200px] items-center gap-9 px-8">
+        <button onClick={() => scrollToSection('home')} className="nav-elem cursor-pointer text-lg font-black tracking-[.08em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+          BIGTIME <span className="text-gold">EMPIRE</span>
         </button>
+        <nav className="nav-elem ml-auto flex items-center gap-8">
+          <button onClick={() => scrollToSection('about-section')} className={navLink}>About</button>
+          <button onClick={() => scrollToSection('our-brands')} className={navLink}>Brands</button>
+          <button onClick={() => scrollToSection('why-section')} className={navLink}>Why work with us</button>
+          <Link to="/connect" className={navLink}>Contact</Link>
+          <button onClick={() => scrollToSection('careers-section')} className="inline-flex min-h-[44px] cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink transition-transform duration-500 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
+        </nav>
       </div>
-      <nav className="flex items-center gap-1 bg-ink rounded-full px-2 py-2 text-sm font-medium nav-elem">
-        <button onClick={() => scrollToSection('home')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Home</button>
-        <button onClick={() => scrollToSection('about-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">About Us</button>
-        <button onClick={() => scrollToSection('our-brands')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Brands</button>
-        <button onClick={() => scrollToSection('careers-section')} className="text-paper hover:text-gold transition-colors duration-300 rounded-full px-4 py-2 cursor-pointer">Careers</button>
-      </nav>
     </header>
   );
 }
@@ -395,6 +398,11 @@ function Careers() {
 }
 
 function MainPage() {
+  return <NewHome />;
+}
+
+// Previous landing page (GSAP version). Unused; kept until its removal is confirmed.
+function MainPageOld() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const mm = gsap.matchMedia();
@@ -488,7 +496,7 @@ function App() {
 
   return (
     <Router>
-      <div ref={container} className="bg-white text-[#141414] font-sans selection:bg-[#c9a227] selection:text-white relative min-h-[100svh] flex flex-col overflow-x-hidden">
+      <div ref={container} className="bg-white text-[#141414] font-sans selection:bg-[#c9a227] selection:text-white relative min-h-[100svh] flex flex-col overflow-x-clip">
         <Navigation />
         <Routes>
           <Route path="/" element={<MainPage />} />
