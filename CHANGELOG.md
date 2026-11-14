@@ -130,3 +130,10 @@
 - Brands showcase height 600vh to 1200vh with new animation ranges, so each brand holds before the next reveal.
 - Removed [ONE-LINE DESCRIPTION]; "[N] open roles" became "Open roles" on the brand slides (still /careers).
 - Deployed to 8086 (bundle index-4fUzS2nZ.js / index-C7FTaK3Y.css) after backup bte-website-html-brandlogos-2026-11-14. 768 and 375 not checked.
+
+## [2026-11-14] Change: mobile pass - brand logos on phone, hamburger nav menu, full-screen Brands intro, hero and CTA copy edits; deployed
+- Brand logos are no longer hidden at 900px and below; they sit above the brand name at 36vh, left-aligned.
+- New mobile nav menu: hamburger plus translucent dropdown with About, Brands, Why work with us, Contact and Careers. It closes on an outside tap, scroll, Escape or link tap. The header Careers pill is hidden at 900px and below.
+- #our-brands intro fills the screen below the nav; larger type on desktop (901px and up).
+- Removed the hero eyebrow and the hero "Our brands" button; new Our Brands description; CTA line now "Open roles across our four brands".
+- Deployed to 8086 (bundle index-Dlrt3K6e.js / index-DFsZrU0w.css) after backup bte-website-html-mobilenav-2026-11-14. 768 not checked.

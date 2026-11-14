@@ -16,9 +16,8 @@ export default function NewHome() {
       <div className="glow"></div>
       <div className="ring"></div>
       <div className="hc">
-      <div className="hbw"><div className="eyebrow fade" style={{color:'var(--gold)','--d':'.1s'}}>BIGTIME EMPIRE CORPORATION</div></div>
       <div className="hhw"><h1 className="hh" aria-label="We do things differently."><span className="w1" aria-hidden="true">We do things</span><span className="w2" aria-hidden="true"><span className="lt" style={{'--i':'0'}}>D</span><span className="lt" style={{'--i':'1'}}>I</span><span className="lt" style={{'--i':'2'}}>F</span><span className="lt" style={{'--i':'3'}}>F</span><span className="lt" style={{'--i':'4'}}>E</span><span className="lt" style={{'--i':'5'}}>R</span><span className="lt" style={{'--i':'6'}}>E</span><span className="lt" style={{'--i':'7'}}>N</span><span className="lt" style={{'--i':'8'}}>T</span><span className="lt" style={{'--i':'9'}}>L</span><span className="lt" style={{'--i':'10'}}>Y</span><span className="lt" style={{'--i':'11'}}>.</span></span></h1></div>
-      <div className="hbw"><div className="hb fade" style={{'--d':'2s'}}><p>The company behind some of the Philippines’ recognizable food and restaurant brands, and a place to grow your career.</p><div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}><Link to="/careers" className="btn gold">View open roles <span className="ar">→</span></Link><a href="#our-brands" className="btn out">Our brands</a></div></div></div>
+      <div className="hbw"><div className="hb fade" style={{'--d':'2s'}}><p>The company behind some of the Philippines’ recognizable food and restaurant brands, and a place to grow your career.</p><div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}><Link to="/careers" className="btn gold">View open roles <span className="ar">→</span></Link></div></div></div>
       </div>
       </div>
       </section>
@@ -31,7 +30,7 @@ export default function NewHome() {
       <section id="our-brands" className="wrap" style={{paddingTop:'120px',paddingBottom:'96px'}}>
       <div className="rv"><div className="eyebrow">OUR BRANDS</div>
       <h2 className="h2">Four brands. <span className="em">One team.</span></h2>
-      <p style={{fontSize:'19px',lineHeight:'1.6',marginTop:'20px',maxWidth:'620px',color:'#444'}}>Every brand hires on its own, and every one is part of the same company. Scroll to meet each one and see where you could join.</p></div>
+      <p style={{fontSize:'19px',lineHeight:'1.6',marginTop:'20px',maxWidth:'620px',color:'#444'}}>Different identities. Different strengths. One shared vision. Get to know the four brands that make us who we are.</p></div>
       </section>
       
       <div className="bsec"><div className="stage">
@@ -72,7 +71,7 @@ export default function NewHome() {
       <div className="crow b" aria-hidden="true"><span>STORE SUPERVISOR · CREW MEMBER · COOK · CASHIER · RECRUITMENT OFFICER · STORE SUPERVISOR · CREW MEMBER · COOK · CASHIER · RECRUITMENT OFFICER · STORE SUPERVISOR · CREW MEMBER · COOK · CASHIER · RECRUITMENT OFFICER · STORE SUPERVISOR · CREW MEMBER · COOK · CASHIER · RECRUITMENT OFFICER · </span></div>
       <div className="cc">
       <h2 className="ch" aria-label="Your next chapter starts here."><span className="c1" aria-hidden="true">Your next</span><span className="c2" aria-hidden="true"><span className="cl" style={{'--i':'0'}}>C</span><span className="cl" style={{'--i':'1'}}>H</span><span className="cl" style={{'--i':'2'}}>A</span><span className="cl" style={{'--i':'3'}}>P</span><span className="cl" style={{'--i':'4'}}>T</span><span className="cl" style={{'--i':'5'}}>E</span><span className="cl" style={{'--i':'6'}}>R</span></span><span className="c3" aria-hidden="true">starts here.</span></h2>
-      <div className="cwrap" style={{display:'flex',flexDirection:'column',alignItems:'center'}}><Link to="/careers" className="cbtn">View open roles <span className="ar">→</span></Link><p className="cmeta">[N] open roles across our four brands</p></div>
+      <div className="cwrap" style={{display:'flex',flexDirection:'column',alignItems:'center'}}><Link to="/careers" className="cbtn">View open roles <span className="ar">→</span></Link><p className="cmeta">Open roles across our four brands</p></div>
       </div>
       </div>
       </section>

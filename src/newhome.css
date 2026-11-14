@@ -64,6 +64,12 @@
 .nh .sph img{width:100%;height:100%;object-fit:contain;display:block}
 .nh .sl2 .btn.gold{background:#D3200F;color:#fff}
 .nh .sl3 .btn.gold{background:var(--ink);color:#fff}
+.nh #our-brands{min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
+@media (min-width:901px){
+.nh #our-brands .eyebrow{font-size:clamp(14px,1.1vw,20px)}
+.nh #our-brands .h2{font-size:clamp(56px,7vw,128px);line-height:.95}
+.nh #our-brands p{font-size:clamp(20px,1.7vw,32px)!important;max-width:min(900px,70vw)!important;margin-top:32px!important}
+}
 .nh .sdots{display:none}
 @keyframes nh-iris{from{clip-path:circle(0% at 50% 62%)}to{clip-path:circle(150% at 50% 62%)}}
 @keyframes nh-inUp{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:none}}
@@ -96,8 +102,12 @@
 .nh .sdots i:nth-child(4){animation-range:cover 72.31% cover 78.46%}
 }
 @media (max-width:900px){
-.nh .sg{grid-template-columns:1fr}
-.nh .sph{display:none}
+.nh .sg{grid-template-columns:1fr;gap:3vh}
+.nh .sl1 .sph,
+.nh .sl2 .sph,
+.nh .sl3 .sph,
+.nh .sl4 .sph{order:-1;aspect-ratio:auto;width:100%;height:36vh;max-height:36vh;padding:0}
+.nh .sph img{object-position:left center}
 .nh .snm{font-size:clamp(40px,13vw,80px)}
 }
 @media (prefers-reduced-motion:reduce){

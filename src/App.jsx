@@ -17,6 +17,25 @@ function Navigation() {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const headerRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const close = () => setMenuOpen(false);
+    const onPointerDown = (e) => {
+      if (e.target.closest && e.target.closest('#mobile-menu, [aria-controls="mobile-menu"]')) return;
+      close();
+    };
+    const onKey = (e) => { if (e.key === 'Escape') close(); };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', close, { passive: true });
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', close);
+    };
+  }, [menuOpen]);
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -58,7 +77,7 @@ function Navigation() {
       className="fixed top-0 left-0 right-0 z-50 h-[76px] w-full border-b border-gold/35 bg-ink/80 text-white backdrop-blur-xl"
     >
       <div className="mx-auto flex h-full w-full max-w-[1200px] items-center gap-9 px-8">
-        <button onClick={() => scrollToSection('home')} className="nav-elem cursor-pointer text-lg font-black tracking-[.08em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+        <button onClick={() => scrollToSection('home')} className="nav-elem cursor-pointer whitespace-nowrap text-lg font-black tracking-[.08em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
           BIGTIME <span className="text-gold">EMPIRE</span>
         </button>
         <nav className="nav-elem ml-auto flex items-center gap-8">
@@ -66,9 +85,30 @@ function Navigation() {
           <button onClick={() => scrollToSection('our-brands')} className={navLink}>Brands</button>
           <button onClick={() => scrollToSection('why-section')} className={navLink}>Why work with us</button>
           <Link to="/connect" className={navLink}>Contact</Link>
-          <button onClick={() => scrollToSection('careers-section')} className="inline-flex min-h-[44px] cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink transition-transform duration-500 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
+          <button onClick={() => scrollToSection('careers-section')} className="max-[900px]:hidden inline-flex min-h-[44px] cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink transition-transform duration-500 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setMenuOpen((o) => !o)}
+            className="hidden max-[900px]:inline-flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full border border-gold/35 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {menuOpen ? <path d="M4 4l12 12M16 4L4 16" /> : <path d="M3 6h14M3 10h14M3 14h14" />}
+            </svg>
+          </button>
         </nav>
       </div>
+      {menuOpen && (
+        <div id="mobile-menu" className="absolute left-0 right-0 top-full flex flex-col border-b border-gold/35 bg-ink/80 backdrop-blur-xl px-8 py-3 min-[901px]:hidden">
+          <button onClick={() => { setMenuOpen(false); scrollToSection('about-section'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">About</button>
+          <button onClick={() => { setMenuOpen(false); scrollToSection('our-brands'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Brands</button>
+          <button onClick={() => { setMenuOpen(false); scrollToSection('why-section'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Why work with us</button>
+          <Link to="/connect" onClick={() => setMenuOpen(false)} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Contact</Link>
+          <button onClick={() => { setMenuOpen(false); scrollToSection('careers-section'); }} className="mt-2 mb-2 inline-flex min-h-[44px] w-fit cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
+        </div>
+      )}
     </header>
   );
 }
