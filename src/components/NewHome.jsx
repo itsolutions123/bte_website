@@ -1,6 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../newhome.css';
+import tsgLogo from '../assets/tsg_hd.jpeg';
+import prLogo from '../assets/pr_hd.png';
+import sapporoLogo from '../assets/sapporo_hd.png';
+import pansolLogo from '../assets/pansol_hd.png';
 
 export default function NewHome() {
   return (
@@ -31,10 +35,10 @@ export default function NewHome() {
       </section>
       
       <div className="bsec"><div className="stage">
-      <div className="sl sl1"><div className="sg"><div className="in"><h3 className="snm">The Sandwich Guy</h3><p className="sd">Fast and fresh sandwiches. [ONE-LINE DESCRIPTION]</p><Link to="/careers" className="btn gold">[N] open roles <span className="ar">→</span></Link></div><div className="sph">[PHOTO · The Sandwich Guy]</div></div></div>
-      <div className="sl sl2"><div className="sg"><div className="in"><h3 className="snm">Pares Retiro</h3><p className="sd">The best pares in town. [ONE-LINE DESCRIPTION]</p><Link to="/careers" className="btn gold">[N] open roles <span className="ar">→</span></Link></div><div className="sph">[PHOTO · Pares Retiro]</div></div></div>
-      <div className="sl sl3"><div className="sg"><div className="in"><h3 className="snm">Sapporo Milktea</h3><p className="sd">Milk tea for every day. [ONE-LINE DESCRIPTION]</p><Link to="/careers" className="btn gold">[N] open roles <span className="ar">→</span></Link></div><div className="sph">[PHOTO · Sapporo Milktea]</div></div></div>
-      <div className="sl sl4"><div className="sg"><div className="in"><h3 className="snm">California Beach Pansol</h3><p className="sd">Resort and leisure. [ONE-LINE DESCRIPTION]</p><Link to="/careers" className="btn gold">[N] open roles <span className="ar">→</span></Link></div><div className="sph">[PHOTO · California Beach Pansol]</div></div></div>
+      <div className="sl sl1"><div className="sg"><div className="in"><h3 className="snm">The Sandwich Guy</h3><p className="sd">Fast and fresh sandwiches.</p><Link to="/careers" className="btn gold">Open roles <span className="ar">→</span></Link></div><div className="sph"><img src={tsgLogo} alt="The Sandwich Guy logo" loading="lazy" decoding="async" /></div></div></div>
+      <div className="sl sl2"><div className="sg"><div className="in"><h3 className="snm">Pares Retiro</h3><p className="sd">The best pares in town.</p><Link to="/careers" className="btn gold">Open roles <span className="ar">→</span></Link></div><div className="sph"><img src={prLogo} alt="Pares Retiro logo" loading="lazy" decoding="async" /></div></div></div>
+      <div className="sl sl3"><div className="sg"><div className="in"><h3 className="snm">Sapporo Milktea</h3><p className="sd">Milk tea for every day.</p><Link to="/careers" className="btn gold">Open roles <span className="ar">→</span></Link></div><div className="sph"><img src={sapporoLogo} alt="Sapporo Milktea logo" loading="lazy" decoding="async" /></div></div></div>
+      <div className="sl sl4"><div className="sg"><div className="in"><h3 className="snm">California Beach Pansol</h3><p className="sd">Resort and leisure.</p><Link to="/careers" className="btn gold">Open roles <span className="ar">→</span></Link></div><div className="sph"><img src={pansolLogo} alt="California Beach Pansol logo" loading="lazy" decoding="async" /></div></div></div>
       <div className="sdots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       </div></div>
       

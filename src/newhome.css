@@ -47,7 +47,7 @@
 .nh .bsec{position:relative;background:var(--ink)}
 .nh .sl{position:relative;min-height:80vh;display:flex;align-items:center;padding:80px 6vw;box-sizing:border-box}
 .nh .sl1{background:var(--ink);color:#fff}
-.nh .sl2{background:var(--gold);color:var(--ink)}
+.nh .sl2{background:#17324D;color:#fff}
 .nh .sl3{background:#fff;color:var(--ink)}
 .nh .sl4{background:var(--ink);color:#fff}
 .nh .sg{width:100%;max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1.25fr 1fr;gap:5vw;align-items:center}
@@ -56,9 +56,13 @@
 .nh .sd{font-size:19px;line-height:1.6;max-width:460px;margin:28px 0 32px;opacity:.85}
 .nh .sph{aspect-ratio:4/5;max-height:62vh;width:100%;display:flex;align-items:flex-end;padding:24px;box-sizing:border-box;font-size:13px;font-weight:600;letter-spacing:.14em;border-radius:6px;background:rgba(20,20,20,.12);color:inherit}
 .nh .sl1 .sph,
-.nh .sl4 .sph{background:linear-gradient(160deg,#2c2c2c,#1a1a1a);color:rgba(255,255,255,.6)}
-.nh .sl3 .sph{background:#EFEFEF;color:#555}
-.nh .sl2 .btn.gold,
+.nh .sl2 .sph,
+.nh .sl3 .sph,
+.nh .sl4 .sph{background:transparent;padding:16px;align-items:center;justify-content:center}
+.nh .sl4 .sph{padding:0;aspect-ratio:1/1;max-height:none}
+.nh .sl3 .snm{color:#D0334A}
+.nh .sph img{width:100%;height:100%;object-fit:contain;display:block}
+.nh .sl2 .btn.gold{background:#D3200F;color:#fff}
 .nh .sl3 .btn.gold{background:var(--ink);color:#fff}
 .nh .sdots{display:none}
 @keyframes nh-iris{from{clip-path:circle(0% at 50% 62%)}to{clip-path:circle(150% at 50% 62%)}}
@@ -67,29 +71,29 @@
 @keyframes nh-bar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes nh-dot{from{opacity:.25;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
 @supports (animation-timeline:view()){
-.nh .bsec{height:600vh;view-timeline:--bs block}
+.nh .bsec{height:1200vh;view-timeline:--bs block}
 .nh .stage{position:sticky;top:0;height:100vh;overflow:hidden}
 .nh .sl{position:absolute;inset:0;min-height:0}
 .nh .sl2,
 .nh .sl3,
 .nh .sl4{animation:nh-iris linear both;animation-timeline:--bs}
-.nh .sl2{animation-range:cover 28% cover 38%}
-.nh .sl3{animation-range:cover 45% cover 55%}
-.nh .sl4{animation-range:cover 62% cover 72%}
-.nh .sl1 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 8% cover 20%}
-.nh .sl2 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 33% cover 44%}
-.nh .sl3 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 50% cover 61%}
-.nh .sl4 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 67% cover 78%}
-.nh .sl1 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 10% cover 24%}
-.nh .sl2 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 35% cover 48%}
-.nh .sl3 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 52% cover 65%}
-.nh .sl4 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 69% cover 82%}
+.nh .sl2{animation-range:cover 29.23% cover 35.38%}
+.nh .sl3{animation-range:cover 50.77% cover 56.92%}
+.nh .sl4{animation-range:cover 72.31% cover 78.46%}
+.nh .sl1 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 7.69% cover 13.85%}
+.nh .sl2 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 30.77% cover 36.92%}
+.nh .sl3 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 52.31% cover 58.46%}
+.nh .sl4 .in{animation:nh-inUp linear both;animation-timeline:--bs;animation-range:cover 73.85% cover 80%}
+.nh .sl1 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 9.23% cover 15.38%}
+.nh .sl2 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 32.31% cover 38.46%}
+.nh .sl3 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 53.85% cover 60%}
+.nh .sl4 .sph{animation:nh-inRot linear both;animation-timeline:--bs;animation-range:cover 75.38% cover 81.54%}
 .nh .sdots{display:flex;position:absolute;left:6vw;bottom:36px;gap:10px;z-index:5;align-items:center;mix-blend-mode:difference;color:#fff;font-size:13px;font-weight:700;letter-spacing:.14em}
 .nh .sdots i{width:10px;height:10px;background:currentColor;border-radius:50%;animation:nh-dot linear both;animation-timeline:--bs}
-.nh .sdots i:nth-child(1){animation-range:cover 10% cover 18%}
-.nh .sdots i:nth-child(2){animation-range:cover 30% cover 38%}
-.nh .sdots i:nth-child(3){animation-range:cover 47% cover 55%}
-.nh .sdots i:nth-child(4){animation-range:cover 64% cover 72%}
+.nh .sdots i:nth-child(1){animation-range:cover 7.69% cover 13.85%}
+.nh .sdots i:nth-child(2){animation-range:cover 29.23% cover 35.38%}
+.nh .sdots i:nth-child(3){animation-range:cover 50.77% cover 56.92%}
+.nh .sdots i:nth-child(4){animation-range:cover 72.31% cover 78.46%}
 }
 @media (max-width:900px){
 .nh .sg{grid-template-columns:1fr}

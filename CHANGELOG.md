@@ -123,3 +123,10 @@
 - All View open roles buttons still go to /careers; jobs API and Apply link untouched.
 - Fixed: App wrapper overflow-x-hidden changed to overflow-x-clip (it blanked the pinned brand showcase); hero ring no longer flashes before its burst.
 - Not deployed. Mobile pass, scroll-padding-top 76px and old-code removal still open.
+
+## [2026-11-14] Change: Home brand slides use real logos and per-brand colours; slower brand pacing; deployed
+- Replaced the four [PHOTO] placeholders with the brand logos (The Sandwich Guy, Pares Retiro, Sapporo Milktea, California Beach Pansol); logo tiles removed.
+- Per-brand slide colours: Pares Retiro blue with red button, Sapporo red headline on white, Sandwich Guy and Pansol on black. Red and blue are a user-approved exception to the palette, brand slides only.
+- Brands showcase height 600vh to 1200vh with new animation ranges, so each brand holds before the next reveal.
+- Removed [ONE-LINE DESCRIPTION]; "[N] open roles" became "Open roles" on the brand slides (still /careers).
+- Deployed to 8086 (bundle index-4fUzS2nZ.js / index-C7FTaK3Y.css) after backup bte-website-html-brandlogos-2026-11-14. 768 and 375 not checked.
