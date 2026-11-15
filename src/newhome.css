@@ -101,6 +101,11 @@
 .nh .sdots i:nth-child(3){animation-range:cover 50.77% cover 56.92%}
 .nh .sdots i:nth-child(4){animation-range:cover 72.31% cover 78.46%}
 }
+@media (min-width:901px){
+.nh .sl3 .sg,.nh .sl4 .sg{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.nh .sl3 .snm{font-size:clamp(44px,7.4vw,118px)}
+.nh .sl4 .snm{font-size:clamp(44px,6.4vw,104px)}
+}
 @media (max-width:900px){
 .nh .sg{grid-template-columns:1fr;gap:3vh}
 .nh .sl1 .sph,

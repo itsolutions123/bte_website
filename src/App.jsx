@@ -352,9 +352,23 @@ function Careers() {
   const chipOn = 'bg-ink text-white';
   const chipOff = 'border border-line-strong bg-white text-ink hover:border-gold';
   const selectCls = 'h-12 rounded-lg border border-line-strong bg-white px-4 text-sm font-medium text-ink outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-gold/40 transition-colors';
+  const [mobileDetail, setMobileDetail] = useState(false);
+  const detailRef = useRef(null);
+  useEffect(() => {
+    if (!mobileDetail || window.innerWidth >= 1024) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e) => { if (e.key === 'Escape') setMobileDetail(false); };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [mobileDetail]);
   const selectJob = (job) => {
     setSelectedJob(job);
-    if (window.innerWidth < 1024) document.getElementById('job-detail')?.scrollIntoView({ behavior: 'smooth' });
+    if (detailRef.current) detailRef.current.scrollTop = 0;
+    setMobileDetail(true);
   };
 
   return (
@@ -433,7 +447,16 @@ function Careers() {
           )}
         </div>
 
-        <div id="job-detail" className="w-full lg:flex-1 lg:sticky lg:top-8 flex flex-col border border-line rounded-2xl bg-white overflow-hidden lg:max-h-[calc(100vh-4rem)]">
+        <div id="job-detail" ref={detailRef} className={`w-full lg:flex-1 lg:sticky lg:top-8 flex flex-col border border-line rounded-2xl bg-white overflow-hidden lg:max-h-[calc(100vh-4rem)] max-lg:fixed max-lg:inset-0 max-lg:z-[60] max-lg:rounded-none max-lg:border-0 max-lg:overflow-y-auto max-lg:will-change-[translate] max-lg:transition-[translate,visibility] max-lg:duration-[420ms] max-lg:ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none ${mobileDetail ? 'max-lg:translate-x-0 max-lg:visible' : 'max-lg:translate-x-full max-lg:invisible'}`}>
+          <div className="lg:hidden sticky top-0 z-10 border-b border-line bg-white px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setMobileDetail(false)}
+              className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-full border border-line-strong bg-white px-4 text-sm font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            >
+              <span aria-hidden="true">←</span> All roles
+            </button>
+          </div>
           {activeJob ? (
             <div className="p-6 md:p-10 flex flex-col gap-8 overflow-y-auto">
               <div className="flex flex-col gap-5">

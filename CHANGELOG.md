@@ -155,3 +155,9 @@
 - /careers back arrow now goes back to the previous page and scroll position; on a direct visit it goes to the home page. Aria-label "Go back".
 - Brand slides: logos for Sapporo, Pares Retiro and The Sandwich Guy switched to 1000px WebP copies (the Sapporo original was 8600x8538 px) to reduce lag on phones. Originals kept in src/assets.
 - Not deployed to 8086. Not checked: phone smoothness, logo sharpness, 768px and 375px, the five external footer links (HTTPS on the four brand domains unverified).
+
+## [2026-11-15] Change: Sapporo and Pansol logo size, /careers mobile job detail slides in; deployed
+- Brand slides (desktop): Sapporo and Pansol titles no longer squeeze their logo columns; the logos now scale close to the Pares Retiro proportion. Titles are slightly smaller (Sapporo up to 118px, Pansol up to 104px).
+- /careers on phone: tapping a job opens the details in a full-screen panel that slides in from the right, with an "All roles" button that slides it back out to the same list position. Escape also closes it. Desktop layout is unchanged. Apply link and job loading untouched.
+- Deployed to 8086 (bundle index-Dvn3xJud.js / index-KxmSzjWG.css) after backups brandsize, careersslide and careersanim (all 2026-11-15). The first deploy also published the earlier undeployed work (nav, hero, footer, join band, back arrow, WebP logos).
+- Not checked: phone lag after the WebP swap, the phone back button on /careers, 768px and 375px, the five external footer links.
