@@ -191,7 +191,6 @@
 .nh .c2{display:flex;justify-content:center;font-size:clamp(44px,14.5vw,250px);margin:.02em 0;white-space:nowrap}
 .nh .cl{display:inline-block;transform-origin:50% 100%}
 .nh .cbtn{position:relative;display:inline-flex;align-items:center;gap:18px;min-height:84px;padding:0 56px;margin-top:5vh;border-radius:999px;background:var(--ink);color:var(--gold);font-weight:800;font-size:clamp(17px,1.8vw,24px);text-transform:uppercase;letter-spacing:.05em;transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
-.nh .cbtn::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--ink);animation:nh-pulse 2.2s ease-out infinite;pointer-events:none}
 .nh .cbtn .ar{display:inline-block;animation:nh-nudge 1.4s var(--ease) infinite}
 .nh .cbtn:hover{transform:scale(1.07);box-shadow:0 30px 60px -20px rgba(20,20,20,.7)}
 .nh .cmeta{margin-top:20px;font-size:17px;font-weight:600}

@@ -86,8 +86,6 @@ function Navigation() {
         <nav className="nav-elem ml-auto flex items-center gap-8">
           <button onClick={() => scrollToSection('about-section')} className={navLink}>About</button>
           <button onClick={() => scrollToSection('our-brands')} className={navLink}>Brands</button>
-          <button onClick={() => scrollToSection('why-section')} className={navLink}>Why work with us</button>
-          <Link to="/connect" className={navLink}>Contact</Link>
           <button onClick={() => scrollToSection('careers-section')} className="max-[900px]:hidden inline-flex min-h-[44px] cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink transition-transform duration-500 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
           <button
             type="button"
@@ -107,8 +105,6 @@ function Navigation() {
         <div id="mobile-menu" className="absolute left-0 right-0 top-full flex flex-col border-b border-gold/35 bg-ink/80 backdrop-blur-xl px-8 py-3 min-[901px]:hidden">
           <button onClick={() => { setMenuOpen(false); scrollToSection('about-section'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">About</button>
           <button onClick={() => { setMenuOpen(false); scrollToSection('our-brands'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Brands</button>
-          <button onClick={() => { setMenuOpen(false); scrollToSection('why-section'); }} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Why work with us</button>
-          <Link to="/connect" onClick={() => setMenuOpen(false)} className="w-full cursor-pointer py-3 text-left text-[17px] font-medium text-white hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold">Contact</Link>
           <button onClick={() => { setMenuOpen(false); scrollToSection('careers-section'); }} className="mt-2 mb-2 inline-flex min-h-[44px] w-fit cursor-pointer items-center rounded-full bg-gold px-6 text-[15px] font-semibold text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">Careers</button>
         </div>
       )}
@@ -298,6 +294,13 @@ const LocationIcon = ({ className }) => (
 );
 
 function Careers() {
+  const navigate = useNavigate();
+  // Go back to where the visitor came from (browser restores the scroll position);
+  // on a direct visit to /careers there is no previous page, so go home instead.
+  const goBack = () => {
+    if (window.history.state && window.history.state.idx > 0) navigate(-1);
+    else navigate('/');
+  };
   const [searchQuery, setSearchQuery] = useState('');
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -356,15 +359,16 @@ function Careers() {
 
   return (
     <div className="relative z-10 flex-grow flex flex-col px-6 md:px-10 pt-8 pb-16 max-w-[1240px] mx-auto w-full gap-8 min-h-[100svh] font-[Archivo,system-ui,sans-serif]">
-      <Link
-        to="/"
-        aria-label="Back to home"
+      <button
+        type="button"
+        onClick={goBack}
+        aria-label="Go back"
         className="flex h-11 w-11 items-center justify-center rounded-full border border-ink text-ink transition-colors duration-300 hover:border-gold hover:text-gold-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
         </svg>
-      </Link>
+      </button>
 
       <div className="flex flex-col gap-3">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-deep">Careers</p>

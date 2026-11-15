@@ -145,3 +145,13 @@
 - Navigation() no longer renders on /connect or /careers.
 - Raw hex in Connect and Careers replaced with token classes. API URLs, Apply link and rich-text styles untouched.
 - Not built: Message sent state on /connect. Not checked: 768px and 375px.
+
+## [2026-11-15] Change: About spacing, hero Contact Us, nav and footer links, /careers back arrow, logos as small WebP; not deployed
+- About ("Who we are") top padding reduced from 120px to 64px so core values and Mission/Vision sit higher after clicking About.
+- Nav: removed "Why work with us" and "Contact" from the desktop nav and the hamburger menu. Nav is About, Brands and the gold Careers pill.
+- Hero: "View open roles" replaced by "Contact Us", linking to /connect.
+- Footer: brand links go to the four brand websites (new tab); Franchise inquiry and Instagram removed; Facebook links to the company profile.
+- Join band: pulsing ring around "View open roles" removed (arrow nudge kept).
+- /careers back arrow now goes back to the previous page and scroll position; on a direct visit it goes to the home page. Aria-label "Go back".
+- Brand slides: logos for Sapporo, Pares Retiro and The Sandwich Guy switched to 1000px WebP copies (the Sapporo original was 8600x8538 px) to reduce lag on phones. Originals kept in src/assets.
+- Not deployed to 8086. Not checked: phone smoothness, logo sharpness, 768px and 375px, the five external footer links (HTTPS on the four brand domains unverified).

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../newhome.css';
-import tsgLogo from '../assets/tsg_hd.jpeg';
-import prLogo from '../assets/pr_hd.png';
-import sapporoLogo from '../assets/sapporo_hd.png';
+import tsgLogo from '../assets/tsg_1000.webp';
+import prLogo from '../assets/pr_1000.webp';
+import sapporoLogo from '../assets/sapporo_1000.webp';
 import pansolLogo from '../assets/pansol_hd.png';
 
 export default function NewHome() {
@@ -17,7 +17,7 @@ export default function NewHome() {
       <div className="ring"></div>
       <div className="hc">
       <div className="hhw"><h1 className="hh" aria-label="We do things differently."><span className="w1" aria-hidden="true">We do things</span><span className="w2" aria-hidden="true"><span className="lt" style={{'--i':'0'}}>D</span><span className="lt" style={{'--i':'1'}}>I</span><span className="lt" style={{'--i':'2'}}>F</span><span className="lt" style={{'--i':'3'}}>F</span><span className="lt" style={{'--i':'4'}}>E</span><span className="lt" style={{'--i':'5'}}>R</span><span className="lt" style={{'--i':'6'}}>E</span><span className="lt" style={{'--i':'7'}}>N</span><span className="lt" style={{'--i':'8'}}>T</span><span className="lt" style={{'--i':'9'}}>L</span><span className="lt" style={{'--i':'10'}}>Y</span><span className="lt" style={{'--i':'11'}}>.</span></span></h1></div>
-      <div className="hbw"><div className="hb fade" style={{'--d':'2s'}}><p>The company behind some of the Philippines’ recognizable food and restaurant brands, and a place to grow your career.</p><div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}><Link to="/careers" className="btn gold">View open roles <span className="ar">→</span></Link></div></div></div>
+      <div className="hbw"><div className="hb fade" style={{'--d':'2s'}}><p>The company behind some of the Philippines’ recognizable food and restaurant brands, and a place to grow your career.</p><div style={{display:'flex',gap:'16px',flexWrap:'wrap'}}><Link to="/connect" className="btn gold">Contact Us <span className="ar">→</span></Link></div></div></div>
       </div>
       </div>
       </section>
@@ -56,7 +56,7 @@ export default function NewHome() {
       </div>
       </section>
       
-      <section id="about-section" className="who wrap" style={{paddingTop:'120px',paddingBottom:'140px'}}>
+      <section id="about-section" className="who wrap" style={{paddingTop:'64px',paddingBottom:'140px'}}>
       <div className="eyebrow">WHO WE ARE</div>
       <h2 className="h2 asm" style={{maxWidth:'900px'}} aria-label="We bring businesses together to create opportunities and build lasting partnerships."><span className="aw" style={{'--x':'22vw','--y':'9vh','--r':'-38deg'}}>We</span> <span className="aw" style={{'--x':'-29vw','--y':'-24vh','--r':'-13deg'}}>bring</span> <span className="aw" style={{'--x':'-31vw','--y':'10vh','--r':'-14deg'}}>businesses</span> <span className="aw" style={{'--x':'19vw','--y':'-15vh','--r':'-30deg'}}>together</span> <span className="aw" style={{'--x':'19vw','--y':'-9vh','--r':'-21deg'}}>to</span> <span className="aw" style={{'--x':'22vw','--y':'-26vh','--r':'29deg'}}>create</span> <span className="aw" style={{'--x':'-21vw','--y':'-19vh','--r':'-29deg'}}>opportunities</span> <span className="aw" style={{'--x':'-36vw','--y':'-14vh','--r':'33deg'}}>and</span> <span className="em"><span className="aw" style={{'--x':'42vw','--y':'22vh','--r':'23deg'}}>build</span> <span className="aw" style={{'--x':'25vw','--y':'-15vh','--r':'-30deg'}}>lasting</span> <span className="aw" style={{'--x':'34vw','--y':'18vh','--r':'21deg'}}>partnerships.</span></span></h2>
       <div className="wg">
@@ -80,9 +80,9 @@ export default function NewHome() {
       <div className="wrap">
       <div className="foot">
       <div><div style={{fontWeight:'900',letterSpacing:'.08em',fontSize:'18px'}}>BIGTIME <span className="em">EMPIRE</span> CORPORATION</div><p style={{color:'#D6D6D6',marginTop:'8px'}}>2/F Bramante Piazza, Renaissance, Ugong, Pasig City, Philippines</p><p style={{color:'#D6D6D6'}}><a href="mailto:admin@bigtimeempire.com">admin@bigtimeempire.com</a></p></div>
-      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Brands</div><div><a href="#brands-section">The Sandwich Guy</a></div><div><a href="#brands-section">Pares Retiro</a></div><div><a href="#brands-section">Sapporo Milktea</a></div><div><a href="#brands-section">California Beach Pansol</a></div></div>
-      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Company</div><div><a href="#about-section">About</a></div><div><Link to="/careers">Careers</Link></div><div><Link to="/connect">Contact</Link></div><div><Link to="/connect">Franchise inquiry</Link></div></div>
-      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Follow us</div><div><a href="#">Instagram</a></div><div><a href="#">Facebook</a></div></div>
+      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Brands</div><div><a href="https://thesandwichguy.com" target="_blank" rel="noopener noreferrer">The Sandwich Guy</a></div><div><a href="https://paresretiro.com" target="_blank" rel="noopener noreferrer">Pares Retiro</a></div><div><a href="https://sapporomilktea.com" target="_blank" rel="noopener noreferrer">Sapporo Milktea</a></div><div><a href="https://californiapansol.com" target="_blank" rel="noopener noreferrer">California Beach Pansol</a></div></div>
+      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Company</div><div><a href="#about-section">About</a></div><div><Link to="/careers">Careers</Link></div><div><Link to="/connect">Contact</Link></div></div>
+      <div><div style={{fontWeight:'600',color:'var(--gold)'}}>Follow us</div><div><a href="https://www.facebook.com/profile.php?id=61580694655133" target="_blank" rel="noopener noreferrer">Facebook</a></div></div>
       </div>
       <div style={{marginTop:'48px',paddingTop:'24px',borderTop:'1px solid rgba(201,162,39,.35)',fontSize:'13px',color:'#A8A8A8'}}>© Bigtime Empire Corporation</div>
       </div>
