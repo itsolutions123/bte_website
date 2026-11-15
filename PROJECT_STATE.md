@@ -191,3 +191,18 @@
 - Hardcodes: no new raw hexes in this step.
 - Not checked: 768px anywhere; Sandwich Guy and Pansol slides at 375px; hero at 375px after the copy edits; sections below the brands on mobile; /careers and /connect on mobile. The nav gray over the white Sapporo slide is the translucent header and was left as is.
 - Open items: 768px pass; the rest of the mobile pass; real brand hex values; confirm each logo PNG is transparent; optimized copies of the ~1.1MB logo files and the 9.2MB newbte.png (H10, per-file confirmation); scroll-padding-top 72px vs the 76px nav; /careers "Could not load job postings" (parked); the earlier open items 9 to 13 from the 2026-11-14 handover still stand.
+
+## 2026-11-15 - /connect and /careers rebuilt from reference screenshots, header removed on both (DEPLOYED to 8086)
+- Work mode: shell, frontend only (src/App.jsx) plus html/ deploys. Branch redesign-playful-gold.
+- /connect: dark two-column page (black page, ink card) from the user's reference images. Left: eyebrow, "Let's talk business." headline, intro copy, and a faint circle with a slowly rotating gold dot (aria-hidden, pointer-events-none, hidden below md, stopped under reduced motion). Right: "Send us a message" card.
+- /connect behaviour unchanged: Back button navigate(-1); form fields firstName, lastName, contactNumber, email, inquiry; mailto:hello@example.com placeholder (still a hardcode, flagged). Labels now read Phone and Message; inputs have htmlFor/id pairs.
+- /connect "Message sent" confirmation card from the references is NOT built: mailto cannot confirm a send, so it needs an explicit behaviour decision (H16).
+- /careers: light layout from the user's reference. Back arrow (links to /), eyebrow CAREERS, black "Open roles." heading, search field with icon plus All locations and All job types dropdowns, job list left, sticky detail panel right.
+- /careers removed by user instruction: the "N open roles across N brands" line and the brand filter chips. Filter state and logic stay in the code, idle (filter stays on all); search still matches brand names. Pay and location icons removed from cards and pills (not in the reference).
+- /careers unchanged: PUBLIC_JOBS_API fetch, APPLY_URL Apply link (?job_id=), job selection, mobile scroll to #job-detail, .rich-text rendering.
+- Header: Navigation() returns null on /connect and /careers (user-confirmed). The logo link and Back to Home no longer exist on those two pages; the back arrow replaces them.
+- Hardcodes: nine raw hex values replaced by token classes in Connect and Careers. Remaining: hello@example.com placeholder, text-red-700 error text (off-palette), raw hex inside dead CareersSection().
+- Deploys to 8086, each with a new-label backup: bte-website-html-connectcareers-2026-11-15 (both pages), bte-website-html-careersnochips-2026-11-15 (chips and count line removed).
+- H15 judgment calls (override any later): back arrow on /careers links to /; orbit circle 338px, 24s rotation, hidden below md; headline max 76px; list column 470px; detail panel sticky at top-8; period added to "Open roles."; Archivo set via font-[Archivo] (the @import lives in src/newhome.css; loading on these two pages not confirmed).
+- Not verified: 768px and 375px on both pages; whether the orbit line passing behind the headline is acceptable under H7.
+- Open: unused brands, brandCount, chipBase, chipOn, chipOff, PayIcon, LocationIcon (H11); Message sent state; the "Current Status" block above and the registry rows (Connect labels, no header on /connect and /careers, no chips on /careers) need updating; html/ changes left uncommitted.

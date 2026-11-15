@@ -137,3 +137,11 @@
 - #our-brands intro fills the screen below the nav; larger type on desktop (901px and up).
 - Removed the hero eyebrow and the hero "Our brands" button; new Our Brands description; CTA line now "Open roles across our four brands".
 - Deployed to 8086 (bundle index-Dlrt3K6e.js / index-DFsZrU0w.css) after backup bte-website-html-mobilenav-2026-11-14. 768 not checked.
+
+## [2026-11-15] Change: /connect and /careers redesigned from reference screenshots; header removed on both; deployed
+- /connect is now a dark two-column page: headline block with a rotating gold-dot circle, and a "Send us a message" card. Labels Phone and Message; same field names and mailto handler.
+- /careers is now a light layout with a back arrow, CAREERS eyebrow, black "Open roles." heading, search plus location and job-type dropdowns, job list and sticky detail panel.
+- Removed on request: /careers brand filter chips and the open-roles count line; pay and location icons.
+- Navigation() no longer renders on /connect or /careers.
+- Raw hex in Connect and Careers replaced with token classes. API URLs, Apply link and rich-text styles untouched.
+- Not built: Message sent state on /connect. Not checked: 768px and 375px.

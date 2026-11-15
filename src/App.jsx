@@ -45,7 +45,10 @@ function Navigation() {
     return () => mm.revert();
   }, { scope: headerRef, dependencies: [isHome] });
 
-  // For sub-pages like /careers or /connect, just show a simple back navigation
+  // /connect and /careers are full-page layouts with no header (user-confirmed 2026-11-15)
+  if (location.pathname === '/connect' || location.pathname === '/careers') return null;
+
+  // For sub-pages like /careers, just show a simple back navigation
   if (!isHome) {
     return (
       <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-line shadow-sm flex justify-between items-center px-6 py-4 md:px-12 md:py-5 2xl:px-[calc((100vw-1536px)/2+3rem)] w-full">
@@ -198,50 +201,77 @@ function Connect() {
     window.location.href = `mailto:hello@example.com?subject=Website Inquiry&body=${body}`;
   };
 
+  const labelCls = 'text-xs font-medium text-white/60';
+  const fieldCls = 'w-full rounded-lg border border-white/15 bg-white/[0.06] px-3.5 py-3 text-[15px] text-white placeholder:text-white/35 outline-none transition-colors focus:border-gold focus-visible:ring-2 focus-visible:ring-gold/40';
+
   return (
-    <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-6 pt-28 pb-12 max-w-3xl mx-auto w-full min-h-screen">
-      <div className="w-full mb-8">
+    <div className="relative z-10 flex min-h-[100svh] w-full flex-grow flex-col bg-black font-[Archivo,system-ui,sans-serif] text-white">
+      <div className="mx-auto w-full max-w-[1260px] flex-grow px-6 pt-8 md:px-10">
         <button
           onClick={() => navigate(-1)}
-          className="w-12 h-12 flex items-center justify-center border border-[#cfd6d3] rounded-full hover:border-[#c9a227] text-[#55646a] hover:text-[#8a6a12] transition-colors duration-300"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white transition-colors duration-300 hover:border-gold hover:text-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           aria-label="Go back"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
         </button>
+
+        <div className="mt-10 grid items-center gap-12 pb-16 md:mt-6 md:grid-cols-2 md:gap-8">
+          <div className="relative md:-ml-10 md:pl-20">
+            <div aria-hidden="true" className="pointer-events-none absolute -top-[118px] left-0 hidden h-[338px] w-[338px] rounded-full border border-white/10 md:block">
+              <div className="absolute inset-0 animate-[spin_24s_linear_infinite] motion-reduce:animate-none">
+                <span className="absolute left-1/2 top-0 -ml-[3px] -mt-[3px] h-1.5 w-1.5 rounded-full bg-gold" />
+              </div>
+            </div>
+            <div className="relative z-10">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">Get in touch</p>
+              <h1 className="mt-6 text-[clamp(48px,6vw,76px)] font-black leading-[0.95] tracking-tight">
+                Let’s talk
+                <span className="mt-1 block w-fit bg-gold px-2 pb-1 text-ink">business.</span>
+              </h1>
+              <p className="mt-8 max-w-[420px] text-[17px] leading-[1.75] text-white/60">
+                Partnerships, franchise inquiries, careers, or just saying hello — tell us what you have in mind and we’ll take it from there.
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full max-w-[500px] rounded-2xl border border-white/10 bg-ink p-8 md:mr-10 md:justify-self-end md:p-10">
+            <h2 className="text-xl font-bold">Send us a message</h2>
+            <form onSubmit={handleSend} className="mt-8 flex flex-col gap-5">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="cf-first" className={labelCls}>First name</label>
+                  <input id="cf-first" name="firstName" required type="text" placeholder="Juan" className={fieldCls} />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="cf-last" className={labelCls}>Last name</label>
+                  <input id="cf-last" name="lastName" required type="text" placeholder="Dela Cruz" className={fieldCls} />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="cf-phone" className={labelCls}>Phone</label>
+                  <input id="cf-phone" name="contactNumber" type="tel" placeholder="09XX XXX XXXX" className={fieldCls} />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="cf-email" className={labelCls}>Email</label>
+                  <input id="cf-email" name="email" required type="email" placeholder="you@email.com" className={fieldCls} />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="cf-message" className={labelCls}>Message</label>
+                <textarea id="cf-message" name="inquiry" required rows="4" placeholder="How can we help?" className={fieldCls + ' resize-none'}></textarea>
+              </div>
+              <button type="submit" className="mt-2 w-full rounded-lg bg-gold px-6 py-4 text-sm font-bold text-ink transition-colors duration-300 hover:bg-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                Send message
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-      <div className="w-full border border-[#e4e7e5] bg-[#f6f5f1] rounded-3xl p-8 md:p-12">
-        <form onSubmit={handleSend} className="flex flex-col gap-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-[#3d4c52] uppercase tracking-widest font-bold">First Name</label>
-              <input name="firstName" required type="text" className="bg-transparent border-b border-[#9fb0aa] p-2 text-[#141414] focus:border-[#c9a227] outline-none transition-colors" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-[#3d4c52] uppercase tracking-widest font-bold">Last Name</label>
-              <input name="lastName" required type="text" className="bg-transparent border-b border-[#9fb0aa] p-2 text-[#141414] focus:border-[#c9a227] outline-none transition-colors" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-[#3d4c52] uppercase tracking-widest font-bold">Contact Number</label>
-              <input name="contactNumber" type="tel" className="bg-transparent border-b border-[#9fb0aa] p-2 text-[#141414] focus:border-[#c9a227] outline-none transition-colors" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-xs text-[#3d4c52] uppercase tracking-widest font-bold">Email</label>
-              <input name="email" required type="email" className="bg-transparent border-b border-[#9fb0aa] p-2 text-[#141414] focus:border-[#c9a227] outline-none transition-colors" />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-xs text-[#3d4c52] uppercase tracking-widest font-bold">Inquiry</label>
-            <textarea name="inquiry" required rows="5" className="bg-white border border-[#9fb0aa] rounded-xl p-3 text-[#141414] focus:border-[#c9a227] outline-none transition-colors resize-none"></textarea>
-          </div>
-          <div className="mt-4">
-            <button type="submit" className="px-10 py-4 rounded-full bg-[#141414] text-white font-semibold text-base hover:bg-[#8a6a12] transition-colors duration-300">
-              Send
-            </button>
-          </div>
-        </form>
-      </div>
+
+      <footer className="mx-auto w-full max-w-[1260px] border-t border-white/10 px-6 py-8 text-[13px] text-white/50 md:px-10">
+        © Bigtime Empire Corporation
+      </footer>
     </div>
   );
 }
@@ -315,119 +345,127 @@ function Careers() {
   );
   const activeJob = filteredJobs.find(j => j.id === selectedJob?.id) || filteredJobs[0] || null;
   const brandCount = new Set(filteredJobs.map(j => j.brand_name).filter(Boolean)).size;
-  const chipBase = 'h-10 px-5 rounded-full text-sm font-semibold transition-colors duration-300 ';
-  const selectCls = 'h-10 rounded-full border border-[#cfd6d3] bg-white px-4 text-sm font-semibold text-[#141414] outline-none focus:border-[#c9a227] transition-colors';
+  const chipBase = 'h-10 px-5 rounded-full text-sm font-semibold transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ';
+  const chipOn = 'bg-ink text-white';
+  const chipOff = 'border border-line-strong bg-white text-ink hover:border-gold';
+  const selectCls = 'h-12 rounded-lg border border-line-strong bg-white px-4 text-sm font-medium text-ink outline-none focus:border-gold focus-visible:ring-2 focus-visible:ring-gold/40 transition-colors';
   const selectJob = (job) => {
     setSelectedJob(job);
     if (window.innerWidth < 1024) document.getElementById('job-detail')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="relative z-10 flex-grow flex flex-col px-6 md:px-12 pt-28 md:pt-32 pb-12 max-w-screen-2xl mx-auto w-full gap-6 min-h-screen">
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-[#141414]">Open roles</h1>
-          {loadState === 'ready' && (
-            <p className="text-base md:text-lg text-[#55646a]">
-              {filteredJobs.length} open {filteredJobs.length === 1 ? 'role' : 'roles'}
-              {brandCount > 0 && ` across ${brandCount} ${brandCount === 1 ? 'brand' : 'brands'}`}
-            </p>
-          )}
-        </div>
-        <input
-          type="text"
-          aria-label="Search roles"
-          placeholder="Search roles, brands or locations"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-white border border-[#cfd6d3] rounded-full px-6 h-12 text-[#141414] placeholder:text-[#55646a] focus:border-[#c9a227] outline-none transition-colors w-full md:w-[420px] text-base"
-        />
+    <div className="relative z-10 flex-grow flex flex-col px-6 md:px-10 pt-8 pb-16 max-w-[1240px] mx-auto w-full gap-8 min-h-[100svh] font-[Archivo,system-ui,sans-serif]">
+      <Link
+        to="/"
+        aria-label="Back to home"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-ink text-ink transition-colors duration-300 hover:border-gold hover:text-gold-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-5 w-5" aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+      </Link>
+
+      <div className="flex flex-col gap-3">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold-deep">Careers</p>
+        <h1 className="text-5xl md:text-6xl font-black tracking-tight text-ink">Open roles.</h1>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2.5">
-        <button type="button" onClick={() => setBrandFilter('all')} className={chipBase + (brandFilter === 'all' ? 'bg-[#141414] text-white' : 'border border-[#cfd6d3] bg-white text-[#141414] hover:border-[#c9a227]')}>All brands</button>
-        {brands.map(b => (
-          <button key={b} type="button" onClick={() => setBrandFilter(b)} className={chipBase + (brandFilter === b ? 'bg-[#141414] text-white' : 'border border-[#cfd6d3] bg-white text-[#141414] hover:border-[#c9a227]')}>{b}</button>
-        ))}
-        {locations.length > 1 && (
-          <select aria-label="Filter by location" value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} className={selectCls}>
-            <option value="all">All locations</option>
-            {locations.map(l => <option key={l} value={l}>{l}</option>)}
-          </select>
-        )}
-        {jobTypes.length > 1 && (
-          <select aria-label="Filter by job type" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={selectCls}>
-            <option value="all">All job types</option>
-            {jobTypes.map(t => <option key={t} value={t}>{t}</option>)}
-          </select>
-        )}
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row gap-3">
+          <div className="relative flex-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z" />
+            </svg>
+            <input
+              type="text"
+              aria-label="Search roles"
+              placeholder="Search roles, brands or locations"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-12 w-full rounded-lg border border-line-strong bg-white pl-11 pr-4 text-[15px] text-ink placeholder:text-muted outline-none transition-colors focus:border-gold focus-visible:ring-2 focus-visible:ring-gold/40"
+            />
+          </div>
+          {locations.length > 1 && (
+            <select aria-label="Filter by location" value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} className={selectCls}>
+              <option value="all">All locations</option>
+              {locations.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
+          )}
+          {jobTypes.length > 1 && (
+            <select aria-label="Filter by job type" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={selectCls}>
+              <option value="all">All job types</option>
+              {jobTypes.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          )}
+        </div>
       </div>
 
       {loadState === 'error' && (
         <p className="text-red-700 text-base">Could not load job postings. Please try again later.</p>
       )}
 
-      <div className="flex flex-col lg:flex-row gap-7 items-start">
-        <div className="flex flex-col gap-3 w-full lg:w-[430px] lg:shrink-0">
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col gap-3 w-full lg:w-[470px] lg:shrink-0">
           {loadState === 'loading' && (
-            <p className="text-[#55646a] text-base italic">Loading job postings...</p>
+            <p className="text-muted text-base italic">Loading job postings...</p>
           )}
           {loadState === 'ready' && filteredJobs.map(job => (
             <button
               type="button"
               key={job.id}
               onClick={() => selectJob(job)}
-              className={`w-full text-left px-5 py-4 rounded-2xl cursor-pointer transition-colors duration-300 flex flex-col gap-1.5 ${activeJob?.id === job.id ? 'border-2 border-[#c9a227] bg-[#f8f1dc]' : 'border-[1.5px] border-[#e4e7e5] bg-white hover:border-[#c9a227]'}`}
+              className={`w-full text-left px-5 py-4 rounded-xl cursor-pointer transition-colors duration-300 flex flex-col gap-1.5 border-[1.5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold ${activeJob?.id === job.id ? 'border-gold bg-cream' : 'border-line bg-white hover:border-gold'}`}
             >
-              <span className="text-[17px] font-bold text-[#141414]">{job.title}</span>
-              <span className="text-sm text-[#55646a]">{[job.brand_name, job.location].filter(Boolean).join(' · ')}</span>
+              <span className="text-[17px] font-bold text-ink">{job.title}</span>
+              <span className="text-sm text-muted">{[job.brand_name, job.location].filter(Boolean).join(' · ')}</span>
               {job.pay_information && (
-                <span className="text-sm font-semibold text-[#8a6a12] flex items-center gap-1.5"><PayIcon className="w-4 h-4 shrink-0" /><span>{job.pay_information}</span></span>
+                <span className="text-sm font-bold text-gold-deep">{job.pay_information}</span>
               )}
             </button>
           ))}
           {loadState === 'ready' && filteredJobs.length === 0 && (
-            <p className="text-[#55646a] text-base italic">No jobs found matching your search and filters.</p>
+            <p className="text-muted text-base italic">No jobs found matching your search and filters.</p>
           )}
         </div>
 
-        <div id="job-detail" className="w-full lg:flex-1 lg:sticky lg:top-24 flex flex-col border-[1.5px] border-[#e4e7e5] rounded-3xl bg-white overflow-hidden lg:max-h-[calc(100vh-7rem)]">
+        <div id="job-detail" className="w-full lg:flex-1 lg:sticky lg:top-8 flex flex-col border border-line rounded-2xl bg-white overflow-hidden lg:max-h-[calc(100vh-4rem)]">
           {activeJob ? (
-            <>
-              <div className="px-6 md:px-9 py-6 border-b border-[#e4e7e5] flex flex-col md:flex-row md:items-start md:justify-between gap-5">
-                <div className="flex flex-col gap-3">
-                  <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#141414]">{activeJob.title}</h2>
-                  <div className="flex flex-wrap gap-2">
-                    {activeJob.brand_name && <span className="text-[#6b520d] text-sm font-bold py-1.5 pr-2">{activeJob.brand_name}</span>}
-                    {activeJob.job_type && <span className="bg-[#f6f5f1] text-[#141414] text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.job_type}</span>}
-                    {activeJob.location && <span className="bg-[#f6f5f1] text-[#141414] text-[13px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5"><LocationIcon className="w-4 h-4 text-[#8a6a12] shrink-0" />{activeJob.location}</span>}
-                    {activeJob.pay_information && <span className="bg-[#f6f5f1] text-[#141414] text-[13px] font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5"><PayIcon className="w-4 h-4 text-[#8a6a12] shrink-0" />{activeJob.pay_information}</span>}
+            <div className="p-6 md:p-10 flex flex-col gap-8 overflow-y-auto">
+              <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="flex flex-col gap-1.5">
+                    <h2 className="text-3xl font-extrabold tracking-tight text-ink">{activeJob.title}</h2>
+                    {activeJob.brand_name && <span className="text-sm text-muted">{activeJob.brand_name}</span>}
                   </div>
+                  <a
+                    href={`${APPLY_URL}?job_id=${activeJob.id}`}
+                    className="shrink-0 self-start rounded-lg bg-ink px-6 py-3 text-sm font-bold text-white transition-colors duration-300 hover:bg-gold-deep focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+                  >
+                    Apply now
+                  </a>
                 </div>
-                <a
-                  href={`${APPLY_URL}?job_id=${activeJob.id}`}
-                  className="shrink-0 self-start px-8 py-3.5 rounded-full bg-[#141414] text-white font-bold text-base hover:bg-[#8a6a12] transition-colors duration-300"
-                >
-                  Apply now
-                </a>
+                <div className="flex flex-wrap gap-2">
+                  {activeJob.job_type && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.job_type}</span>}
+                  {activeJob.location && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.location}</span>}
+                  {activeJob.pay_information && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.pay_information}</span>}
+                </div>
               </div>
-              <div className="px-6 md:px-9 py-7 flex flex-col gap-7 overflow-y-auto">
-                {activeJob.description && (
-                  <div className="flex flex-col gap-2">
-                    <h3 className="text-lg font-bold text-[#141414]">About the role</h3>
-                    <div className="rich-text text-[#3d4c52] text-base leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: activeJob.description }} />
-                  </div>
-                )}
-                {activeJob.requirements && (
-                  <div className="flex flex-col gap-2">
-                    <h3 className="text-lg font-bold text-[#141414]">Requirements</h3>
-                    <div className="rich-text text-[#3d4c52] text-base leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: activeJob.requirements }} />
-                  </div>
-                )}
-              </div>
-            </>
+              {activeJob.description && (
+                <div className="flex flex-col gap-3">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-gold-deep">About the role</h3>
+                  <div className="rich-text text-muted-strong text-base leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: activeJob.description }} />
+                </div>
+              )}
+              {activeJob.requirements && (
+                <div className="flex flex-col gap-3">
+                  <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-gold-deep">Requirements</h3>
+                  <div className="rich-text text-muted-strong text-base leading-relaxed whitespace-pre-line" dangerouslySetInnerHTML={{ __html: activeJob.requirements }} />
+                </div>
+              )}
+            </div>
           ) : (
-            <div className="flex items-center justify-center min-h-[40vh] text-[#55646a] text-base">
+            <div className="flex items-center justify-center min-h-[40vh] text-muted text-base">
               {loadState === 'loading' ? 'Loading...' : 'Select a job to view details'}
             </div>
           )}
