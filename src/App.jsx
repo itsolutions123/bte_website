@@ -437,8 +437,11 @@ function Careers() {
             >
               <span className="text-[17px] font-bold text-ink">{job.title}</span>
               <span className="text-sm text-muted">{[job.brand_name, job.location].filter(Boolean).join(' · ')}</span>
-              {job.pay_information && (
-                <span className="text-sm font-bold text-gold-deep">{job.pay_information}</span>
+              {job.job_type && (
+                <span className="inline-flex items-center gap-1.5 text-sm font-bold text-gold-deep">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4 shrink-0"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  {job.job_type}
+                </span>
               )}
             </button>
           ))}
@@ -473,9 +476,8 @@ function Careers() {
                   </a>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {activeJob.job_type && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.job_type}</span>}
-                  {activeJob.location && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.location}</span>}
-                  {activeJob.pay_information && <span className="bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full">{activeJob.pay_information}</span>}
+                  {activeJob.job_type && <span className="inline-flex items-center gap-1.5 bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4 shrink-0"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>{activeJob.job_type}</span>}
+                  {activeJob.location && <span className="inline-flex items-center gap-1.5 bg-paper text-ink text-[13px] font-semibold px-3 py-1.5 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-4 w-4 shrink-0"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>{activeJob.location}</span>}
                 </div>
               </div>
               {activeJob.description && (

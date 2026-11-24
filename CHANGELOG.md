@@ -161,3 +161,11 @@
 - /careers on phone: tapping a job opens the details in a full-screen panel that slides in from the right, with an "All roles" button that slides it back out to the same list position. Escape also closes it. Desktop layout is unchanged. Apply link and job loading untouched.
 - Deployed to 8086 (bundle index-Dvn3xJud.js / index-KxmSzjWG.css) after backups brandsize, careersslide and careersanim (all 2026-11-15). The first deploy also published the earlier undeployed work (nav, hero, footer, join band, back arrow, WebP logos).
 - Not checked: phone lag after the WebP swap, the phone back button on /careers, 768px and 375px, the five external footer links.
+
+## [2026-11-24] Change: /careers pay hidden from job posts; location and job type icons; deployed
+- /careers: the pay is no longer shown to applicants. The job cards now show the title, brand and location, then the job type with a small briefcase icon. The detail panel chips show only the job type and the location, each with a small icon (briefcase, map pin). No pay line anywhere on the page.
+- Icons are inline SVGs in src/App.jsx (no icon library added).
+- Only src/App.jsx changed. The jobs API still sends pay_information; the page just no longer reads it (0 references left in App.jsx). Anyone opening the Network tab can still see it until the ATS public endpoint stops sending it.
+- An intermediate version (a "Payment: ..." label with a banknote icon) was built and deployed first, then replaced the same day.
+- Deployed to 8086 (bundle index-B_AvxcqK.js / index-CSJsWXP8.css) after backups bte-website-html-payicons-20261124 (the version before the Payment label) and bte-website-html-hidepay-20261124 (the Payment-label version). Source backups: ~/backups/App.jsx.bak-payicons-20261124 and App.jsx.bak-hidepay-20261124.
+- Not checked: 768px and 375px of the cards and chips; a job with no job type or no location (the chip or line is simply omitted).
